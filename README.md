@@ -1,6 +1,7 @@
 Install modern cmake > v20
 Follow the best answer in
 https://askubuntu.com/questions/355565/how-do-i-install-the-latest-version-of-cmake-from-the-command-line
+Download `https://cmake.org/files/v3.20/cmake-3.20.6.tar.gz`
 
 ## Reading materials
 https://www.pragmaticlinux.com/2022/02/create-a-shared-library-in-c-with-cmake/

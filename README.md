@@ -5,7 +5,7 @@ Download `https://cmake.org/files/v3.20/cmake-3.20.6.tar.gz`
 
 ### Command
 ```
-cmake -S . -B build && cmake --build build/
+cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -S . -B build && cmake --build build/
 ```
 
 ###  Reading materials

@@ -19,3 +19,7 @@ cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -S . -B build && cmake --build build/
 - https://cliutils.gitlab.io/modern-cmake/
 - https://youtu.be/eC9-iRN2b04
 - https://github.com/Mizux/cmake-cpp
+- https://github.com/pananton/cpp-lib-template
+- https://rvarago.medium.com/introduction-to-cmake-for-cpp-4c464272a239
+- https://medium.com/@onur.dundar1/cmake-tutorial-585dd180109b
+- https://medium.com/@pananton/modern-cmake-tutorial-for-c-library-developers-12f3bf57dc87

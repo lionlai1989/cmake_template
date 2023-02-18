@@ -1,19 +1,22 @@
-#include <src/semicircle_ruler/semicircle_ruler.h>
 #include <iostream>
+#include <src/geometry/shapes/circle.h>
+#include <src/geometry/shapes/line.h>
 #include <src/metric/i2m.h>
 #include <src/metric/m2i.h>
-#include <src/geometry/circle/circle.h>
-#include <src/geometry/line/line.h>
+#include <src/semicircle_ruler/semicircle_ruler.h>
 
-SemicircleRuler::SemicircleRuler(double length, double radius):length(length),radius(radius) {}
+SemicircleRuler::SemicircleRuler(double length, double radius)
+    : line(length), circle(radius) {}
 
-void SemicircleRuler::measure_length(){
-    std::cout << "An object with length: " << "\n";
-    double l;
-    l = inch2mm(10.0);
+void SemicircleRuler::draw_line() {
+
+  double l;
+  l = src::metric::inch2mm(this->line.get_length());
+  std::cout << "An object with length: " << l << "mm.\n";
 }
 
-
-void SemicircleRuler::measure_angle(){
-    std::cout << "A corner with angle: " << "\n";
+void SemicircleRuler::draw_semicircle() {
+  std::cout << "A corner with angle: "
+            << "\n";
+  this->circle.display();
 }

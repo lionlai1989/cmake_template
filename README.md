@@ -23,3 +23,7 @@ cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -S . -B build && cmake --build build/
 - https://rvarago.medium.com/introduction-to-cmake-for-cpp-4c464272a239
 - https://medium.com/@onur.dundar1/cmake-tutorial-585dd180109b
 - https://medium.com/@pananton/modern-cmake-tutorial-for-c-library-developers-12f3bf57dc87
+- https://www.cs.odu.edu/~zeil/cs250PreTest/latest/Public/cppProgramStructure/index.html
+- https://medium.com/heuristics/c-application-development-part-1-project-structure-454b00f9eddc
+- https://api.csswg.org/bikeshed/?force=1&url=https://raw.githubusercontent.com/vector-of-bool/pitchfork/develop/data/spec.bs
+- https://www.reddit.com/r/cpp/comments/8qzepa/comment/e0o5gd0/?utm_source=share&utm_medium=web2x&context=3

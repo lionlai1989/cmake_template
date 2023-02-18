@@ -1,2 +1,1 @@
-add_subdirectory(line)
-add_subdirectory(circle)
+add_subdirectory(shapes)

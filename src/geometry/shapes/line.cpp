@@ -1,5 +1,7 @@
 #include <iostream>
-#include <src/geometry/shapes/line.h>
+#include <src/geometry/shapes/line.hpp>
+
+namespace src::geometry::shapes {
 
 Line::Line(double length) : length(length) {}
 
@@ -8,3 +10,5 @@ void Line::display() {
 }
 
 double Line::get_length() { return this->length; }
+
+} // namespace src::geometry::shapes

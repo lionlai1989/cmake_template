@@ -1,4 +1,4 @@
-#include <src/metric/m2i.h>
+#include <src/metric/m2i.hpp>
 
 namespace src::metric {
 

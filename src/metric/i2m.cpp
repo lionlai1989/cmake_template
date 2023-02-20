@@ -1,4 +1,4 @@
-#include <src/metric/i2m.h>
+#include <src/metric/i2m.hpp>
 
 namespace src::metric {
 

@@ -1,0 +1,2 @@
+add_executable(run_semicircle_ruler run_semicircle_ruler.cpp)
+target_include_directories(run_semicircle_ruler PUBLIC ${CMAKE_SOURCE_DIR})

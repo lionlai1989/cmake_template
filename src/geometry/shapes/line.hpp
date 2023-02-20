@@ -3,6 +3,8 @@
 
 #include <string>
 
+namespace src::geometry::shapes {
+
 class Line {
 private:
   double length;
@@ -12,5 +14,7 @@ public:
   virtual void display();
   virtual double get_length();
 };
+
+} // namespace src::geometry::shapes
 
 #endif

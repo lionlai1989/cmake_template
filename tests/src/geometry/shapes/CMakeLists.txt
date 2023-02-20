@@ -1,0 +1,9 @@
+add_executable(
+    circle_test
+    circle.test.cpp
+)
+target_link_libraries(
+  circle_test
+  GTest::gtest_main
+  shapes
+)

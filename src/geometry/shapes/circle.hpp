@@ -3,6 +3,8 @@
 
 #include <string>
 
+namespace src::geometry::shapes {
+
 class Circle {
 private:
   double radius;
@@ -11,5 +13,7 @@ public:
   Circle(double);
   virtual void display();
 };
+
+} // namespace src::geometry::shapes
 
 #endif

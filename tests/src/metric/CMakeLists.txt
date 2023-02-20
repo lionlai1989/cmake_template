@@ -2,15 +2,15 @@
 # target_link_libraries(GTest::GTest INTERFACE gtest_main)
 
 add_executable(
-    line_test
-    line_test.cpp
+    i2m_test
+    i2m_test.cpp
 )
 
 target_link_libraries(
-  line_test
+  i2m_test
   GTest::gtest_main
-  shapes
+  metric
 )
 
 include(GoogleTest)
-gtest_discover_tests(line_test)
+gtest_discover_tests(i2m_test)

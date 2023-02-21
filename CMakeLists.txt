@@ -3,6 +3,7 @@ project(cmake_template VERSION 0.0.1 LANGUAGES CXX)
 
 add_subdirectory(src)
 add_subdirectory(examples)
+add_subdirectory(include/src/semicircle_ruler)
 
 # It must be called before adding `tests` subdirectory.
 enable_testing()

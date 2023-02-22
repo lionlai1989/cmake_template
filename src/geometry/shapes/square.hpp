@@ -5,14 +5,14 @@
 
 namespace src::geometry::shapes {
 
-class Line {
+class Square {
 private:
-  double length;
+  double side_length;
 
 public:
-  Line(double);
+  Square(double);
   virtual void display();
-  virtual double get_length();
+  virtual double get_area();
 };
 
 } // namespace src::geometry::shapes

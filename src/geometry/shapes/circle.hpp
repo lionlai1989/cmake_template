@@ -12,6 +12,7 @@ private:
 public:
   Circle(double);
   virtual void display();
+  virtual double get_area();
 };
 
 } // namespace src::geometry::shapes

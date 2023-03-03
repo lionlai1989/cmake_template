@@ -7,7 +7,7 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-enable_testing()
+# enable_testing()
 
 # add_executable(test_sample test_sample.c)
 # target_link_libraries(test_sample sample)

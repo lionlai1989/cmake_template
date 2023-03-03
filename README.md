@@ -37,3 +37,4 @@ cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON –S . -B ./build && cmake --build ./buil
 - https://hsf-training.github.io/hsf-training-cmake-webpage/04-targets/index.html
 - https://iscinumpy.dev/
 - https://thatonegamedev.com/cpp/how-to-write-unit-tests-with-cmake/
+- https://stackoverflow.com/questions/69542820/cmake-include-paths-library-that-depend-on-external-library

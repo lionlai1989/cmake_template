@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <iostream>
-#include <src/metric/i2m.hpp>
+#include <metric/i2m.hpp>
 
 TEST(I2mTest, ClassAssertion) {
   double inch = 2;

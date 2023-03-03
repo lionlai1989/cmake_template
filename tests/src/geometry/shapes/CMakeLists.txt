@@ -12,5 +12,8 @@ target_link_libraries(
   shapes
 )
 
+target_include_directories(square_test PUBLIC ${CMAKE_SOURCE_DIR}/include/ ${CMAKE_SOURCE_DIR}/src/)
+
+
 include(GoogleTest)
 gtest_discover_tests(square_test)

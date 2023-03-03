@@ -1,5 +1,5 @@
-#ifndef METRIC_I2M_H
-#define METRIC_I2M_H
+#ifndef METRIC_I2M_HPP
+#define METRIC_I2M_HPP
 
 namespace src::metric {
 

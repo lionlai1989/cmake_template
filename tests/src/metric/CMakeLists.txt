@@ -12,5 +12,9 @@ target_link_libraries(
   metric
 )
 
+# target_include_directories(i2m_test PUBLIC ${CMAKE_SOURCE_DIR}/include/ ${CMAKE_SOURCE_DIR}/src/)
+target_include_directories(i2m_test PUBLIC ${CMAKE_SOURCE_DIR}/include/ ${CMAKE_SOURCE_DIR}/src/)
+
+
 include(GoogleTest)
 gtest_discover_tests(i2m_test)

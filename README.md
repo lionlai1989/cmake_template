@@ -1,12 +1,16 @@
 Install modern cmake > v20
 Follow the best answer in
 https://askubuntu.com/questions/355565/how-do-i-install-the-latest-version-of-cmake-from-the-command-line
-Download `https://cmake.org/files/v3.20/cmake-3.20.6.tar.gz`
+Download `https://cmake.org/files/v3.22/cmake-3.22.6.tar.gz`
 
 ### Command
 ```
-cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -S . -B build && cmake --build build/
-cmake -GNinja -S . -B build && cmake --build build/ && (cd build/; ctest -V)
+cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -S . -B build && cmake --build build/ -j 4
+cmake -G Ninja -S . -B build && cmake --build build/ -j 4 && (cd build/; ctest -V)
+
+cmake -G Ninja -S . -B build && cmake --build build/ -j 4 && cmake --install ./build --prefix /tmp/install-test && (cd build/; ctest -V)
+
+cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON –S . -B ./build && cmake --build ./build && cmake --install ./build --prefix /tmp/install-test
 ```
 
 ###  Reading materials
@@ -28,3 +32,8 @@ cmake -GNinja -S . -B build && cmake --build build/ && (cd build/; ctest -V)
 - https://medium.com/heuristics/c-application-development-part-1-project-structure-454b00f9eddc
 - https://api.csswg.org/bikeshed/?force=1&url=https://raw.githubusercontent.com/vector-of-bool/pitchfork/develop/data/spec.bs
 - https://www.reddit.com/r/cpp/comments/8qzepa/comment/e0o5gd0/?utm_source=share&utm_medium=web2x&context=3
+- https://www.udemy.com/course/complete-cmake-project-management/#reviews
+- https://thatonegamedev.com/cpp/how-to-embed-files-in-your-c-project/
+- https://hsf-training.github.io/hsf-training-cmake-webpage/04-targets/index.html
+- https://iscinumpy.dev/
+- https://thatonegamedev.com/cpp/how-to-write-unit-tests-with-cmake/

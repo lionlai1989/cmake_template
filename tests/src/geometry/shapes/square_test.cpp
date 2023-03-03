@@ -1,6 +1,6 @@
+#include <geometry/shapes/square.hpp>
 #include <gtest/gtest.h>
 #include <iostream>
-#include <src/geometry/shapes/square.hpp>
 
 TEST(SquareTest, ClassAssertion) {
   src::geometry::shapes::Square s{2.0};

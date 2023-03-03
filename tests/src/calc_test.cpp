@@ -2,8 +2,7 @@
 #include <iostream>
 #include <src/calc.hpp>
 
-TEST(I2mTest, ClassAssertion) {
-  double tmp = src::calc_circle_area(1.2);
-
-  EXPECT_EQ(tmp, 2 * 25.3);
+TEST(CalcTest, ClassAssertion) {
+  double tmp = src::calc_square_area(2);
+  EXPECT_EQ(tmp, 2 * 2 * 25.3 * 25.3);
 }

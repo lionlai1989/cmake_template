@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace src::geometry::shapes {
+namespace mypackage::geometry::shapes {
 
 class Square {
 private:
@@ -15,6 +15,6 @@ public:
   virtual double get_area();
 };
 
-} // namespace src::geometry::shapes
+} // namespace mypackage::geometry::shapes
 
 #endif

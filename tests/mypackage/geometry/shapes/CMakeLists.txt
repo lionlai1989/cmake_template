@@ -10,7 +10,7 @@ target_link_libraries(
   metric
 )
 
-target_include_directories(square_test PUBLIC ${CMAKE_SOURCE_DIR})
+target_include_directories(square_test PUBLIC ${CMAKE_SOURCE_DIR}/src)
 
 target_compile_features(square_test PRIVATE cxx_std_14)
 

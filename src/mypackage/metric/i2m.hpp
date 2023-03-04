@@ -1,10 +1,10 @@
 #ifndef I2M_HPP
 #define I2M_HPP
 
-namespace src::metric {
+namespace mypackage::metric {
 
 double inch2mm(double inch);
 
-} // namespace src::metric
+} // namespace mypackage::metric
 
 #endif

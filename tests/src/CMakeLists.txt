@@ -13,6 +13,5 @@ target_include_directories(calc_test PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 target_compile_features(calc_test PRIVATE cxx_std_14)
 
-
 include(GoogleTest)
 gtest_discover_tests(calc_test)

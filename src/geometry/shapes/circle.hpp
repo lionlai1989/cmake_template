@@ -1,5 +1,5 @@
-#ifndef SHAPES_CIRCLE_HPP
-#define SHAPES_CIRCLE_HPP
+#ifndef CIRCLE_HPP
+#define CIRCLE_HPP
 
 #include <string>
 

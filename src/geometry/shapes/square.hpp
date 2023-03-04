@@ -1,5 +1,5 @@
-#ifndef SHAPES_LINE_HPP
-#define SHAPES_LINE_HPP
+#ifndef SQUARE_HPP
+#define SQUARE_HPP
 
 #include <string>
 

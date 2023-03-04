@@ -1,5 +1,5 @@
-#include <geometry/shapes/circle.hpp>
-#include <geometry/shapes/square.hpp>
+#include <src/geometry/shapes/circle.hpp>
+#include <src/geometry/shapes/square.hpp>
 #include <src/calc.hpp>
 
 namespace src {

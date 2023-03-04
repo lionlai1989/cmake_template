@@ -7,25 +7,4 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-# enable_testing()
-
-# add_executable(test_sample test_sample.c)
-# target_link_libraries(test_sample sample)
-
-
-
-
-
 add_subdirectory(src)
-
-# add_executable(
-#   hello_test
-#   hello_test.cc
-# )
-# target_link_libraries(
-#   hello_test
-#   GTest::gtest_main
-# )
-
-# include(GoogleTest)
-#gtest_discover_tests(circle_test)

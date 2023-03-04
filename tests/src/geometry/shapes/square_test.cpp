@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-#include <iostream>
 #include <src/geometry/shapes/square.hpp>
 
 TEST(SquareTest, ClassAssertion) {

@@ -13,6 +13,7 @@ cmake -G Ninja -S . -B build && cmake --build build/ -j 4 && cmake --install ./b
 cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON –S . -B ./build && cmake --build ./build && cmake --install ./build --prefix /tmp/install-test
 ```
 
+Run `./build/examples/rgb2gray -i ./files/book.png -o ./files/book_gray.jpg` to test the executable `rgb2gray`.
 ###  Reading materials
 - https://www.pragmaticlinux.com/2022/02/create-a-shared-library-in-c-with-cmake/
 - https://www.pragmaticlinux.com/2022/03/how-to-link-a-shared-library-with-gcc-and-cmake/
@@ -41,3 +42,7 @@ cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON –S . -B ./build && cmake --build ./buil
 
 stb_image:
 - https://subscription.packtpub.com/book/game-development/9781838986193/2/ch02lvl1sec14/loading-images-with-stb
+
+
+Eigen:
+- https://gist.github.com/jeeho-ahn/07f943110731a0b4c2e73fc2fa8c96bf

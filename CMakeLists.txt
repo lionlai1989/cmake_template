@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.22)
 project(cmake_template VERSION 0.0.1 LANGUAGES CXX)
 
+# find_package (Eigen3 3.4 REQUIRED)
+
 add_subdirectory(src/mypackage)
 add_subdirectory(examples)
 

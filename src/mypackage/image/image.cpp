@@ -2,6 +2,8 @@
 #include <cmath>
 #include <iostream>
 #include <utility>
+#include <Eigen/Dense>
+
 
 #include "image.hpp"
 #define STB_IMAGE_IMPLEMENTATION

@@ -4,7 +4,7 @@
 
 add_library(myimage STATIC)
 
-# target_link_libraries (myimage Eigen3::Eigen)
+target_link_libraries (myimage Eigen3::Eigen)
 
 # This needs to be PUBLIC so it can be found by *.cpp in tests/.
 target_sources(myimage PUBLIC image.cpp)

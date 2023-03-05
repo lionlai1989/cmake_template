@@ -9,6 +9,8 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb/stb_image_write.h>
 
+namespace mypackage::image {
+
 Image::Image(std::string file_path) {
   unsigned char *img_data = stbi_load(file_path.c_str(), &this->width,
                                       &this->height, &this->channels, 0);
@@ -145,3 +147,5 @@ Image rgb_to_grayscale(const Image &img) {
   }
   return gray;
 }
+
+} // namespace mypackage::image

@@ -3,6 +3,8 @@
 
 #include <string>
 
+namespace mypackage::image {
+
 struct Image {
   explicit Image(std::string file_path);
   Image(int w, int h, int c);
@@ -23,5 +25,7 @@ struct Image {
 };
 
 Image rgb_to_grayscale(const Image &img);
+
+} // namespace mypackage::image
 
 #endif

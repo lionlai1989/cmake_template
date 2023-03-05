@@ -13,6 +13,11 @@ cmake -G Ninja -S . -B build && cmake --build build/ -j 4 && cmake --install ./b
 cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON –S . -B ./build && cmake --build ./build && cmake --install ./build --prefix /tmp/install-test
 ```
 
+Use eigen:
+1. Do `export CMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH:/home/lai/cmake_template/extern/eigen-3.4.0/"
+`
+2. Do `cmake -S . -B build && cmake --build build/ -j 4 && (cd build/; ctest -V)`
+
 Run `./build/examples/rgb2gray -i ./files/book.png -o ./files/book_gray.jpg` to test the executable `rgb2gray`.
 ###  Reading materials
 - https://www.pragmaticlinux.com/2022/02/create-a-shared-library-in-c-with-cmake/
@@ -46,3 +51,5 @@ stb_image:
 
 Eigen:
 - https://gist.github.com/jeeho-ahn/07f943110731a0b4c2e73fc2fa8c96bf
+- https://stackoverflow.com/questions/60103934/cmake-eigen3-dir-notfound
+- https://stackoverflow.com/questions/12249140/find-package-eigen3-for-cmake

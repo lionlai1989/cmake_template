@@ -2,3 +2,6 @@
 	path = extern/stb
 	url = https://github.com/nothings/stb.git
 	branch = master
+[submodule "extern/eigen-3.4.0"]
+	path = extern/eigen-3.4.0
+	url = https://gitlab.com/libeigen/eigen.git

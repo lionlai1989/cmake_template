@@ -38,3 +38,6 @@ cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON –S . -B ./build && cmake --build ./buil
 - https://iscinumpy.dev/
 - https://thatonegamedev.com/cpp/how-to-write-unit-tests-with-cmake/
 - https://stackoverflow.com/questions/69542820/cmake-include-paths-library-that-depend-on-external-library
+
+stb_image:
+- https://subscription.packtpub.com/book/game-development/9781838986193/2/ch02lvl1sec14/loading-images-with-stb

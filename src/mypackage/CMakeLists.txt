@@ -1,5 +1,6 @@
 add_subdirectory(metric)
 add_subdirectory(geometry)
+add_subdirectory(image)
 
 add_library(calc_static STATIC)
 target_sources(calc_static PUBLIC calc.cpp)

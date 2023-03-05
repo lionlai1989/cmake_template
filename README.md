@@ -2,7 +2,7 @@ Install modern cmake > v20
 Follow the best answer in
 https://askubuntu.com/questions/355565/how-do-i-install-the-latest-version-of-cmake-from-the-command-line
 Download `https://cmake.org/files/v3.22/cmake-3.22.6.tar.gz`
-
+- The eigen submodule is fixed to 3.4.0. Don't change it unless necessary.!!!
 ### Command
 ```
 cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -S . -B build && cmake --build build/ -j 4

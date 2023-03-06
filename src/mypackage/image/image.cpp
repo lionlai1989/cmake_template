@@ -1,11 +1,11 @@
 #include <cassert>
 #include <cmath>
+#include <eigen-3.4.0/Eigen/Dense>
+#include <eigen-3.4.0/unsupported/Eigen/CXX11/Tensor>
 #include <iostream>
+#include <mypackage/image/image.hpp>
 #include <utility>
-#include <Eigen/Dense>
 
-
-#include "image.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -23,12 +23,21 @@ Image::Image(std::string file_path) {
     std::exit(1);
   }
 
+  this->pixels = std::make_unique<Eigen::Tensor<double, 3>>(
+      this->channels, this->height, this->width);
+
+  std::cout << "the image size: " << this->pixels->size() << '\n';
+  this->size = this->pixels->size();
+
   this->size = this->width * this->height * this->channels;
   this->data = new double[this->size];
   for (int x = 0; x < this->width; x++) {
     for (int y = 0; y < this->height; y++) {
       for (int c = 0; c < this->channels; c++) {
+
+        // NOTE: the order
         int src_idx = y * this->width * this->channels + x * this->channels + c;
+        (*this->pixels)(c, y, x) = img_data[src_idx] / 255.;
         int dst_idx = c * this->height * this->width + y * this->width + x;
         this->data[dst_idx] = img_data[src_idx] / 255.;
       }

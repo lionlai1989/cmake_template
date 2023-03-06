@@ -1,7 +1,9 @@
 #ifndef IMAGE_HPP
 #define IMAGE_HPP
 
+#include <memory>
 #include <string>
+#include <unsupported/Eigen/CXX11/Tensor>
 
 namespace mypackage::image {
 
@@ -19,6 +21,7 @@ struct Image {
   int channels;
   int size;
   double *data;
+  std::unique_ptr<Eigen::Tensor<double, 3>> pixels;
   bool save(std::string file_path);
   void set_pixel(int x, int y, int c, double val);
   double get_pixel(int x, int y, int c) const;

@@ -50,7 +50,8 @@ Image::Image(std::string file_path) {
 
 Image::Image(int w, int h, int c)
     : width{w}, height{h}, channels{c}, size{w * h * c},
-      data{new double[w * h * c]()} {}
+      data{new double[w * h * c]()},
+      pixels{std::make_unique<Eigen::Tensor<double, 3>>(c, w, h)} {}
 
 Image::Image() : width{0}, height{0}, channels{0}, size{0}, data{nullptr} {}
 

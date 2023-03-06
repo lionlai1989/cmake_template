@@ -20,11 +20,8 @@ struct Image {
   int height;
   int channels;
   int size;
-  double *data;
   std::unique_ptr<Eigen::Tensor<double, 3>> pixels;
   bool save(std::string file_path);
-  void set_pixel(int x, int y, int c, double val);
-  double get_pixel(int x, int y, int c) const;
 };
 
 Image rgb_to_grayscale(const Image &img);

@@ -10,4 +10,4 @@ target_link_libraries (myimage Eigen3::Eigen)
 target_sources(myimage PUBLIC image.cpp)
 target_include_directories(myimage PUBLIC ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/extern)
 
-target_compile_features(myimage PRIVATE cxx_std_14)
+target_compile_features(myimage PRIVATE cxx_std_17)

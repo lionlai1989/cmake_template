@@ -8,7 +8,7 @@ target_link_libraries(
 
 target_include_directories(i2m_test PUBLIC ${CMAKE_SOURCE_DIR}/src)
 
-target_compile_features(i2m_test PRIVATE cxx_std_14)
+target_compile_features(i2m_test PRIVATE cxx_std_17)
 
 include(GoogleTest)
 gtest_discover_tests(i2m_test)

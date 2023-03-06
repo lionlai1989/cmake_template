@@ -13,7 +13,7 @@ target_include_directories(
     calc_static PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
 )
 
-target_compile_features(calc_static PRIVATE cxx_std_14)
+target_compile_features(calc_static PRIVATE cxx_std_17)
 
 add_library(rgb2gray_static STATIC)
 target_sources(rgb2gray_static PUBLIC rgb2gray.cpp)
@@ -26,4 +26,4 @@ target_include_directories(
     rgb2gray_static PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>"
 )
 
-target_compile_features(rgb2gray_static PRIVATE cxx_std_14)
+target_compile_features(rgb2gray_static PRIVATE cxx_std_17)

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <mypackage/image/image.hpp>
 #include <utility>
+#include <filesystem>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -56,7 +57,7 @@ Image::Image(const Image &other)
     : width{other.width}, height{other.height}, channels{other.channels},
       size{other.size}, pixels{std::make_unique<Eigen::Tensor<double, 3>>(
                             other.channels, other.height, other.width)} {
-  // std::cout << "copy constructor\n";
+  std::cout << "Copy Constructor\n";
   for (int x = 0; x < this->width; x++) {
     for (int y = 0; y < this->height; y++) {
       for (int c = 0; c < this->channels; c++) {
@@ -68,7 +69,7 @@ Image::Image(const Image &other)
 
 Image &Image::operator=(const Image &other) {
   if (this != &other) {
-    // std::cout << "copy assignment\n";
+    std::cout << "Copy Assignment Operator\n";
     width = other.width;
     height = other.height;
     channels = other.channels;
@@ -89,12 +90,12 @@ Image::Image(Image &&other)
     : width{other.width}, height{other.height}, channels{other.channels},
       size{other.size}, pixels{std::make_unique<Eigen::Tensor<double, 3>>(
                             other.channels, other.height, other.width)} {
-  // std::cout << "move constructor\n";
+  std::cout << "Move Constructor\n";
   other.size = 0;
 }
 
 Image &Image::operator=(Image &&other) {
-  // std::cout << "move assignment\n";
+  std::cout << "Move Assignment Operator\n";
   width = other.width;
   height = other.height;
   channels = other.channels;
@@ -109,6 +110,8 @@ Image &Image::operator=(Image &&other) {
 
 // save image as jpg file
 bool Image::save(std::string file_path) {
+  auto file_extension = std::filesystem::path(file_path).extension();
+  //std::cout << file_extension;
   unsigned char *out_data =
       new unsigned char[this->width * this->height * this->channels];
   for (int x = 0; x < this->width; x++) {
@@ -119,8 +122,18 @@ bool Image::save(std::string file_path) {
       }
     }
   }
-  bool success = stbi_write_jpg(file_path.c_str(), this->width, this->height,
-                                this->channels, out_data, 100);
+  bool success;
+  if (file_extension == std::string(".jpg") || file_extension == std::string(".JPG")) {
+    auto quality = 100;
+    success = stbi_write_jpg(file_path.c_str(), this->width, this->height,
+                                this->channels, out_data, quality);
+  } else if (file_extension == std::string(".png") || file_extension == std::string(".png")) {
+    auto stride_in_bytes = this->width * this->channels;
+    success = stbi_write_png(file_path.c_str(), this->width, this->height,
+                                this->channels, out_data, stride_in_bytes);
+  } else {
+    std::cerr << "Unsupported file format: " << file_extension << "\n";
+  }
   if (!success)
     std::cerr << "Failed to save image: " << file_path << "\n";
 

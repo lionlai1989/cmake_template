@@ -19,6 +19,8 @@ Use eigen:
 2. Do `cmake -S . -B build && cmake --build build/ -j 4 && (cd build/; ctest -V)`
 
 Run `./build/examples/rgb2gray -i ./files/book.png -o ./files/book_gray.jpg` to test the executable `rgb2gray`.
+`./build/examples/rgb2gray -i ./files/book_in_scene.jpg -o ./files/book_in_scene_gray.jpg`
+
 ###  Reading materials
 - https://www.pragmaticlinux.com/2022/02/create-a-shared-library-in-c-with-cmake/
 - https://www.pragmaticlinux.com/2022/03/how-to-link-a-shared-library-with-gcc-and-cmake/

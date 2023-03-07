@@ -1,27 +1,62 @@
-Install modern cmake > v20
-Follow the best answer in
-https://askubuntu.com/questions/355565/how-do-i-install-the-latest-version-of-cmake-from-the-command-line
-Download `https://cmake.org/files/v3.22/cmake-3.22.6.tar.gz`
-- The eigen submodule is fixed to 3.4.0. Don't change it unless necessary.!!!
-### Command
+# C++ project template with CMake
+
+Personally I've encountered CMake many times in my life and I think it's about time to genuinely learn CMake. There are many CMake tutorials over the internet, and those tutorials are split up into small projects. It's helpful to learn the basics from small projects, but small projects are just too naive to be practical in the real world. And when looking into real-world projects incorporated with CMake, they are also too complicated to understand the whole picture. Thus, this repository aims for building a template for a real-world project.
+
+## Description
+
+This project is a Pybind11 template. I personally found that most of the Pybind11 tutorials on the internet is either too naive to be useful or too complicate to learn Pybind11 for a complete beginner like me. Therefore, I decide to create this template which is an intermediate level to teach myself creating a C++ project with Python binding. This template has the following features:
+- Use CMake.
+- Demonstrate adding stb, Eigen, and Pybind11 as submodules.
+
+## Getting Started
+
+### Dependencies
+* Minimum CMake version is `3.22.0`. Please follow the best answer [here](https://askubuntu.com/questions/355565/how-do-i-install-the-latest-version-of-cmake-from-the-command-line) to either install or update the CMake. Download `https://cmake.org/files/v3.22/cmake-3.22.6.tar.gz` if you want to use CMake `3.22`.
+* The C++ library [Eigen](https://gitlab.com/libeigen/eigen) and the C image library [stb](https://github.com/nothings/stb) are added as git submodules. You don't have to do anything here. Just remember to pass `--recursive` while cloning this repo.
+* I use Linux and Visual Studio Code (VS Code) as my developing environment. So, you probably also need to download the following tools to be able to have a smoother developing experience. `C/C++`, `C/C++ Extension`, `CMake`, `CMake Extension` from VS Code.  `llvm`, `lldb` and `ninja`. ` apt install python3-dev`.
+
+### Installing
+* Download repo: `git clone --recursive https://github.com/lionlai1989/cmake_template.git`. If `--recursive` is not used when cloning, then `git submodule update --init` can be run to clone the submodules.
+* TODO: ADD INSTALL CMAKE INSTALL COMMAND.
+
+### Build, Install and Execute
 ```
-cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -S . -B build && cmake --build build/ -j 4
-cmake -G Ninja -S . -B build && cmake --build build/ -j 4 && (cd build/; ctest -V)
-
-cmake -G Ninja -S . -B build && cmake --build build/ -j 4 && cmake --install ./build --prefix /tmp/install-test && (cd build/; ctest -V)
-
-cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON –S . -B ./build && cmake --build ./build && cmake --install ./build --prefix /tmp/install-test
+cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -S . -B build/ && cmake --build build/ -j 4
+cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON –S . -B build/ && cmake --build build/ -j 4 && cmake --install build/ --prefix /tmp/install-test/
+cmake -G Ninja -S . -B build/ && cmake --build build/ -j 4 && (cd build/; ctest -V)
+cmake -G Ninja -S . -B build/ && cmake --build build/ -j 4 && cmake --install ./build --prefix /tmp/install-test/ && (cd build/; ctest -V)
 ```
+* Run the example command to verify the executable and libraries are rightly created.
+`./build/examples/rgb2gray -i ./files/book.png -o ./files/book_gray.png` converts a RGB `image,png` to a grayscale `image_gray.png`.  
+`./build/examples/rgb2gray -i ./files/book_in_scene.jpg -o ./files/book_in_scene_gray.jpg` converts a a RGB `image,jpg` to a grayscale `image_gray.jpg`.
 
-Use eigen:
-1. Do `export CMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH:/home/lai/cmake_template/extern/eigen-3.4.0/"
-`
-2. Do `cmake -S . -B build && cmake --build build/ -j 4 && (cd build/; ctest -V)`
+### Developing
+TODO: Try libvips, CImg, terrasect, and probably opencv. Use Clang Static Analyzer and clang-tidy.
 
-Run `./build/examples/rgb2gray -i ./files/book.png -o ./files/book_gray.jpg` to test the executable `rgb2gray`.
-`./build/examples/rgb2gray -i ./files/book_in_scene.jpg -o ./files/book_in_scene_gray.jpg`
+## Help
 
-###  Reading materials
+If there is any feedbacks, comments or questions, please create an issue in this repository.
+
+## Authors
+
+[@lionlai](https://github.com/lionlai1989)
+
+## Version History
+
+* 0.2
+    * Various bug fixes and optimizations
+    * See [commit change]() or See [release history]()
+* 0.1
+    * Initial Release
+
+## License
+
+This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
+
+## Acknowledgments
+Inspiration and useful references are listed here for further self-education.
+
+CMake:
 - https://www.pragmaticlinux.com/2022/02/create-a-shared-library-in-c-with-cmake/
 - https://www.pragmaticlinux.com/2022/03/how-to-link-a-shared-library-with-gcc-and-cmake/
 - https://tldp.org/HOWTO/Program-Library-HOWTO/shared-libraries.html

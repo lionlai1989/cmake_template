@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.22)
 project(cmake_template VERSION 0.0.1 LANGUAGES CXX)
 
-# Choose either set() or list() to setup the variable.
+# Choose either `export`, set() or list() to setup the variable.
+# Execute `export CMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH:/path/to/cmake_project/extern/eigen-3.4.0/"` in shell.
 # set(CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/extern/eigen-3.4.0/")
 list(APPEND CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/extern/eigen-3.4.0/")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/extern/eigen-3.4.0/cmake")

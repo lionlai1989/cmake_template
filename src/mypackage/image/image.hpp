@@ -8,14 +8,18 @@
 namespace mypackage::image {
 
 struct Image {
-  explicit Image(std::string file_path);
-  Image(int w, int h, int c);
   Image();
-  ~Image();
-  Image(const Image &other);
+
+  // Only remove explicit if needed.
+  explicit Image(std::string file_path);
+  explicit Image(int c, int h, int w);
+  explicit Image(const Image &other);
   Image &operator=(const Image &other);
-  Image(Image &&other);
+  Image(Image &&other); // can not use explicit
   Image &operator=(Image &&other);
+  ~Image();
+  bool operator==(const Image &other) const;
+
   int width;
   int height;
   int channels; // aka comp in std_image
@@ -25,7 +29,7 @@ struct Image {
 };
 
 Image rgb_to_grayscale(const Image &img);
-
+Image get_image_with_ones(int channel, int height, int width);
 } // namespace mypackage::image
 
 #endif

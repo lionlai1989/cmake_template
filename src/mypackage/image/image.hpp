@@ -1,9 +1,9 @@
 #ifndef IMAGE_HPP
 #define IMAGE_HPP
 
+#include <eigen-3.4.0/unsupported/Eigen/CXX11/Tensor>
 #include <memory>
 #include <string>
-#include <unsupported/Eigen/CXX11/Tensor>
 
 namespace mypackage::image {
 

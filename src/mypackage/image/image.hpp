@@ -20,9 +20,9 @@ struct Image {
   ~Image();
   bool operator==(const Image &other) const;
 
-  int width;
-  int height;
   int channels; // aka comp in std_image
+  int height;
+  int width;
   int size;
   std::unique_ptr<Eigen::Tensor<double, 3>> pixels;
   bool save(std::string file_path);

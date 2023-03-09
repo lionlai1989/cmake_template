@@ -5,7 +5,6 @@
 
 TEST(ImageTest, ClassAssertion) {
   mypackage::image::Image test_img1(2, 3, 4);
-
   int counter = 0;
   for (int x = 0; x < test_img1.width; x++) {
     for (int y = 0; y < test_img1.height; y++) {
@@ -42,6 +41,5 @@ TEST(ImageTest, ClassAssertion) {
 
   std::vector<mypackage::image::Image> vec;
   vec.push_back(mypackage::image::get_image_with_ones(2, 3, 4));
-  // std::cout << "vec[0]\n" << (*vec[0].pixels) << '\n';
   EXPECT_EQ(vec[0], tmp_img);
 }

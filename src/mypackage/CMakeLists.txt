@@ -27,3 +27,9 @@ target_include_directories(
 )
 
 target_compile_features(rgb2gray_static PRIVATE cxx_std_17)
+
+
+include(GNUInstallDirs) # Defines the ${CMAKE_INSTALL_INCLUDEDIR} variable.
+install(TARGETS calc_static)
+install(TARGETS rgb2gray_static)
+

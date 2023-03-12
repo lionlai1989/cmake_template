@@ -47,8 +47,8 @@ Image::Image(std::string file_path) {
       }
     }
   }
-  // if (this->channels == 4)
-  //   this->channels = 3; // ignore alpha channel
+  if (this->channels == 4)
+    this->channels = 3; // ignore alpha channel
   stbi_image_free(img_data);
 }
 

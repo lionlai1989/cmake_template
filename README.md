@@ -1,6 +1,6 @@
 # C++ project template with CMake
 
-Personally I've encountered CMake many times in my life and I think it's about time to genuinely learn CMake. There are many CMake tutorials over the internet, and those tutorials are split up into small projects. It's helpful to learn the basics from small projects, but small projects are just too naive to be practical in the real world. And when looking into real-world projects incorporated with CMake, they are also too complicated to understand the whole picture. Thus, this repository aims for building a template for a real-world project.
+As a seasoned software developer, I've had more run-ins with CMake than I can count. But let's be real, it's time to get serious and really learn this thing. Sure, there are a ton of CMake tutorials floating around on the interwebs, but they all focus on small projects. And let's face it, those projects are about as practical as a chocolate teapot. When you dive into larger, real-world projects that use CMake, things get complicated quick. It's like trying to unravel a ball of yarn that's been tangled by a mischievous cat. So, I've taken it upon myself to create a repository that builds a template for a real-world project. Let's cut through the fluff and get down to business!
 
 ## Description
 

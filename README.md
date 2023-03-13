@@ -44,7 +44,7 @@ Before you start, you need to make sure you have the following dependencies inst
 - Install  
   This package can be installed in your system or a custom location in your file system. To install it, run the following command:
   ```
-  cmake --install build/ --prefix /tmp/install-test/`
+  cmake --install build/ --prefix /tmp/install-test/
   ```
   The above code installs the package in `/tmp/install-test/`.
   

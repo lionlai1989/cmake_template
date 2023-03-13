@@ -1,40 +1,71 @@
 # C++ project template with CMake
 
-As a seasoned software developer, I've had more run-ins with CMake than I can count. But let's be real, it's time to get serious and really learn this thing. Sure, there are a ton of CMake tutorials floating around on the interwebs, but they all focus on small projects. And let's face it, those projects are about as practical as a chocolate teapot. When you dive into larger, real-world projects that use CMake, things get complicated quick. It's like trying to unravel a ball of yarn that's been tangled by a mischievous cat. So, I've taken it upon myself to create a repository that builds a template for a real-world project. Let's cut through the fluff and get down to business!
-
+As a software developer, it's important to have a strong foundation in C++ development, and that includes mastering CMake. While there are plenty of CMake tutorials out there, most of them focus on small projects, which may not be as practical for real-world applications. That's why I've created a C++ project template that includes all the important features needed for larger projects.
 ## Description
 
-TODO: DESCRIBE WHAT FEATURES THIS REPO HAS.
+This project demonstrates how to use CMake and includes the following features:
+- Eigen library
+- stb_image library
+- Namespace package
+- GoogleTest
+- Examples
 
 ## Getting Started
 
 ### Dependencies
-* Minimum CMake version is `3.22.0`. Please follow the best answer [here](https://askubuntu.com/questions/355565/how-do-i-install-the-latest-version-of-cmake-from-the-command-line) to either install or update the CMake. Download `https://cmake.org/files/v3.22/cmake-3.22.6.tar.gz` if you want to use CMake `3.22`.
-* The C++ library [Eigen](https://gitlab.com/libeigen/eigen) and the C image library [stb](https://github.com/nothings/stb) are added as git submodules. You don't have to do anything here. Just remember to pass `--recursive` while cloning this repo.
-* I use Linux and Visual Studio Code (VS Code) as my developing environment. So, you probably also need to download the following tools to be able to have a smoother developing experience. `C/C++`, `C/C++ Extension`, `CMake`, `CMake Extension` from VS Code.  `llvm`, `lldb` and `ninja`. ` apt install python3-dev`.
+Before you start, you need to make sure you have the following dependencies installed:
+* **CMake 3.22.0 or higher:** If you don't have CMake installed, or if you need to update it, you can follow the instructions [here](https://askubuntu.com/questions/355565/how-do-i-install-the-latest-version-of-cmake-from-the-command-line). To use version 3.22, you can download it from https://cmake.org/files/v3.22/cmake-3.22.6.tar.gz.
+* [**Eigen library:**](https://gitlab.com/libeigen/eigen) This is a C++ library that we'll use in our project. Don't worry about installing it separately, as it's included as a git submodule in our repository.
+* [**stb image library:**](https://github.com/nothings/stb) This is a C library for loading and saving images. It's also included as a git submodule, so you don't need to do anything extra.
+* **Development tools for Linux and VS Code:** To develop our project, we'll be using Linux and Visual Studio Code (VS Code). To have a smoother experience, you should install the following tools and extensions for VS Code:
+  * `C/C++`
+  * `C/C++ Extension`
+  * `CMake`
+  * `CMake Extension`
+  * `llvm`
+  * `lldb`
+  * `ninja`
+  * `python3-dev` (install this with apt install python3-dev)
 
-### Installing
-* Download repo: `git clone --recursive https://github.com/lionlai1989/cmake_template.git`. If `--recursive` is not used when cloning, then `git submodule update --init` can be run to clone the submodules.
-* TODO: ADD INSTALL CMAKE INSTALL COMMAND.
+### Downloading
+* To download the repository, run the following command: `git clone --recursive https://github.com/lionlai1989/cmake_template.git`. If you forget to use the `--recursive` option when cloning, you can still clone the submodules by running the command `git submodule update --init --recursive`.
 
 ### Build, Install and Execute
-```
-cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -S . -B build/ && cmake --build build/ -j 4
-cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON –S . -B build/ && cmake --build build/ -j 4 && cmake --install build/ --prefix /tmp/install-test/
-cmake -G Ninja -S . -B build/ && cmake --build build/ -j 4 && (cd build/; ctest -V)
-cmake -G Ninja -S . -B build/ && cmake --build build/ -j 4 && cmake --install ./build --prefix /tmp/install-test/ && (cd build/; ctest -V)
-```
-* Run the example command to verify the executable and libraries are rightly created.
-`./build/examples/rgb2gray -i ./files/book.png -o ./files/book_gray.png` converts a RGB `image,png` to a grayscale `image_gray.png`.  
-`./build/examples/rgb2gray -i ./files/book_in_scene.jpg -o ./files/book_in_scene_gray.jpg` converts a a RGB `image,jpg` to a grayscale `image_gray.jpg`.
+- Build:  
+  To build the project, run the following command:
+  ```
+  cmake -G Ninja -S . -B build/ && cmake --build build/ -j 4 && (cd build/; ctest -V)
+  ```
+  If the build is successful, the tests will be run automatically and you should see the message:
+  ```
+  100% tests passed, 0 tests failed out of 4
+  ```
+
+- Install  
+  This package can be installed in your system or a custom location in your file system. To install it, run the following command:
+  ```
+  cmake --install build/ --prefix /tmp/install-test/`
+  ```
+  The above code installs the package in `/tmp/install-test/`.
+  
+- Execute  
+  The installation can be tested with the following command:
+  ```
+  /tmp/install-test/bin/rgb2gray -i /tmp/install-test/bin/book_in_scene.jpg -o ./book_in_scene_gray.jpg
+  /tmp/install-test/bin/rgb2gray -i /tmp/install-test/bin/book.png -o ./book_gray.png
+  ```
+  It will create two grayscale images,`book_in_scene_gray.jpg` and `book_gray.png` in your current folder.
 
 ### Developing
-TODO: Try libvips, CImg, terrasect, and probably opencv. Use Clang Static Analyzer and clang-tidy.
+- Using Libraries in this Package:  
+  To use the libraries included in this package, it is necessary to include the appropriate headers in your code and link to the libraries in your project.
+
+- Future Developments:  
+  In the future, there are plans to expand this project to include additional example libraries to further explore their use. These libraries include libvips, CImg, terrasect, and opencv. Additionally, the code will be further improved by utilizing tools such as Clang Static Analyzer and clang-tidy to identify potential issues and enhance overall code quality.
 
 ## Help
 
-If there is any feedbacks, comments or questions, please create an issue in this repository.
-
+If you need any help, have any feedback or comments, or have questions about this project, please don't hesitate to create an issue in this repository. We will try to respond to your inquiry as soon as possible.
 ## Authors
 
 [@lionlai](https://github.com/lionlai1989)
@@ -52,7 +83,7 @@ If there is any feedbacks, comments or questions, please create an issue in this
 This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
 
 ## Acknowledgments
-Inspiration and useful references are listed here for further self-education.
+Explore the inspiration and references listed here to further expand your knowledge and sharpen your skills.
 
 CMake:
 - https://www.pragmaticlinux.com/2022/02/create-a-shared-library-in-c-with-cmake/

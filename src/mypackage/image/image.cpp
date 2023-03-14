@@ -68,7 +68,7 @@ Image::Image(int c, int h, int w)
 }
 
 Image::Image(const Image &other)
-    : width{other.width}, height{other.height}, channels{other.channels},
+    : channels{other.channels}, height{other.height}, width{other.width},
       size{other.size}, pixels{std::make_unique<Eigen::Tensor<double, 3>>(
                             other.channels, other.height, other.width)} {
   std::clog << "Copy Constructor\n";
@@ -113,7 +113,7 @@ Image &Image::operator=(const Image &other) {
 }
 
 Image::Image(Image &&other)
-    : width{other.width}, height{other.height}, channels{other.channels},
+    : channels{other.channels}, height{other.height}, width{other.width},
       size{other.size}, pixels{std::move(other.pixels)} {
   /**
    * NOTE: When initializing `pixel`, `pixels{other.pixels}` can not be

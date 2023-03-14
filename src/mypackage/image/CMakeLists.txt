@@ -11,3 +11,5 @@ target_sources(myimage PUBLIC image.cpp)
 target_include_directories(myimage PUBLIC ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/extern)
 
 target_compile_features(myimage PRIVATE cxx_std_17)
+# NOTE: Using -Werror is not good if underlying libraries have warnings.
+target_compile_options(myimage PRIVATE -Wall -Wextra -Wpedantic)

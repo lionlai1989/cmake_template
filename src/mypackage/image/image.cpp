@@ -70,19 +70,29 @@ Image::Image(const Image &other)
       size{other.size}, pixels{std::make_unique<Eigen::Tensor<double, 3>>(
                             other.channels, other.height, other.width)} {
   std::clog << "Copy Constructor\n";
-  // TODO: There must be a BETTER way to assign every elements.
-  for (int x = 0; x < width; x++) {
-    for (int y = 0; y < height; y++) {
-      for (int c = 0; c < channels; c++) {
-        (*pixels)(c, y, x) = (*other.pixels)(c, y, x);
-      }
-    }
-  }
+  /**
+   * Take advantage of copy assignment operator of Eigen::Tensor().
+   * How funny it is that we are not able to take advantage of copy constructor
+   * of Eigen::Tensor() here.
+   */
+  *pixels = *other.pixels;
+  // for (int x = 0; x < width; x++) {
+  //   for (int y = 0; y < height; y++) {
+  //     for (int c = 0; c < channels; c++) {
+  //       (*pixels)(c, y, x) = (*other.pixels)(c, y, x);
+  //     }
+  //   }
+  // }
 }
 
 Image &Image::operator=(const Image &other) {
   std::clog << "Copy Assignment Operator\n";
   if (this != &other) {
+    channels = other.channels;
+    height = other.height;
+    width = other.width;
+    size = other.size;
+
     /** NOTE: `this` could be constructed from the default constructor, which
      * means this->pixels points to nullptr. `this` could also have different
      * size as `other`'s. So, `this->pixels` shall be deleted, and it needs to
@@ -92,21 +102,18 @@ Image &Image::operator=(const Image &other) {
      * location.
      */
     // this->pixels.reset(); // delete the object, leaving this->pixels empty
-    this->pixels = std::make_unique<Eigen::Tensor<double, 3>>(
+    pixels = std::make_unique<Eigen::Tensor<double, 3>>(
         other.channels, other.height, other.width);
+    // Take advantage of copy assignment operator of Eigen::Tensor().
+    *pixels = *other.pixels;
 
-    this->channels = other.channels;
-    this->height = other.height;
-    this->width = other.width;
-    this->size = other.size;
-
-    for (int x = 0; x < this->width; x++) {
-      for (int y = 0; y < this->height; y++) {
-        for (int c = 0; c < this->channels; c++) {
-          (*this->pixels)(c, y, x) = (*other.pixels)(c, y, x);
-        }
-      }
-    }
+    // for (int x = 0; x < this->width; x++) {
+    //   for (int y = 0; y < this->height; y++) {
+    //     for (int c = 0; c < this->channels; c++) {
+    //       (*this->pixels)(c, y, x) = (*other.pixels)(c, y, x);
+    //     }
+    //   }
+    // }
   }
   return *this;
 }
@@ -136,10 +143,10 @@ Image::Image(Image &&other)
 Image &Image::operator=(Image &&other) {
   std::clog << "Move Assignment Operator\n";
   if (this != &other) {
-    this->channels = other.channels;
-    this->height = other.height;
-    this->width = other.width;
-    this->size = other.size;
+    channels = other.channels;
+    height = other.height;
+    width = other.width;
+    size = other.size;
     /**
      * NOTE: We don't need to check if `this->pixels` points to nullptr or the
      * size of `this->pixels` is the same as `other.pixels`, because
@@ -150,7 +157,7 @@ Image &Image::operator=(Image &&other) {
      * https://stackoverflow.com/questions/26318506/transferring-the-ownership-of-object-from-one-unique-ptr-to-another-unique-ptr-i
      * Finally, remember to reset other.
      */
-    this->pixels = std::move(other.pixels);
+    pixels = std::move(other.pixels);
     other.channels = 0;
     other.height = 0;
     other.width = 0;
@@ -210,7 +217,7 @@ bool Image::save(std::string file_path) {
                              out_data, quality);
   } else if (file_extension == std::string(".png") ||
              file_extension == std::string(".png")) {
-    auto stride_in_bytes = this->width * this->channels;
+    auto stride_in_bytes = width * channels;
     success = stbi_write_png(file_path.c_str(), width, height, channels,
                              out_data, stride_in_bytes);
   } else {

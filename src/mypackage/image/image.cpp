@@ -15,11 +15,11 @@
 namespace mypackage::image {
 
 Image::Image() : channels{0}, height{0}, width{0}, size{0}, pixels{nullptr} {
-  std::cout << "The default constructor takes no paramters.\n";
+  std::clog << "The default constructor takes no paramters.\n";
 }
 
 Image::Image(std::string file_path) {
-  std::cout << "The constructor takes a file's path.\n";
+  std::clog << "The constructor takes a file path.\n";
   unsigned char *img_data = stbi_load(file_path.c_str(), &this->width,
                                       &this->height, &this->channels, 0);
   if (img_data == nullptr) {
@@ -33,7 +33,7 @@ Image::Image(std::string file_path) {
       this->channels, this->height, this->width);
   this->size = this->pixels->size();
 
-  std::cout << "The image shape: " << this->channels << " x " << this->height
+  std::clog << "The image shape: " << this->channels << " x " << this->height
             << " x " << this->width << '\n';
   assert(this->size == this->channels * this->height * this->width);
   // this->size = this->width * this->height * this->channels;
@@ -56,7 +56,7 @@ Image::Image(int c, int h, int w)
     : channels{c}, height{h}, width{w}, size{c * h * w},
       pixels{std::make_unique<Eigen::Tensor<double, 3>>(c, h, w)} {
   // NOTE: All members have been initialized.
-  std::cout << "The constructor takes c, h, and w.\n";
+  std::clog << "The constructor takes c, h, and w.\n";
   // Assign 0 to pixels.
   for (int x = 0; x < this->width; x++) {
     for (int y = 0; y < this->height; y++) {
@@ -71,7 +71,7 @@ Image::Image(const Image &other)
     : width{other.width}, height{other.height}, channels{other.channels},
       size{other.size}, pixels{std::make_unique<Eigen::Tensor<double, 3>>(
                             other.channels, other.height, other.width)} {
-  std::cout << "Copy Constructor\n";
+  std::clog << "Copy Constructor\n";
   for (int x = 0; x < this->width; x++) {
     for (int y = 0; y < this->height; y++) {
       for (int c = 0; c < this->channels; c++) {
@@ -82,7 +82,7 @@ Image::Image(const Image &other)
 }
 
 Image &Image::operator=(const Image &other) {
-  std::cout << "Copy Assignment Operator\n";
+  std::clog << "Copy Assignment Operator\n";
   if (this != &other) {
     /** NOTE: `this` could be constructed from the default constructor, which
      * means this->pixels points to nullptr. `this` could also have different
@@ -124,7 +124,7 @@ Image::Image(Image &&other)
    * `other`. Thus, we don't have to check if `this.pixels` points to nullptr or
    * if the size of `this.pixels` is the same as `other.pixels`.
    */
-  std::cout << "Move Constructor\n";
+  std::clog << "Move Constructor\n";
 
   // Reset all `other`'s members because they are not relevant anymore.
   other.channels = 0;
@@ -135,7 +135,7 @@ Image::Image(Image &&other)
 }
 
 Image &Image::operator=(Image &&other) {
-  std::cout << "Move Assignment Operator\n";
+  std::clog << "Move Assignment Operator\n";
   if (this != &other) {
     this->channels = other.channels;
     this->height = other.height;
@@ -161,7 +161,7 @@ Image &Image::operator=(Image &&other) {
   return *this;
 }
 
-Image::~Image() { std::cout << "Destruct Image.\n"; }
+Image::~Image() { std::clog << "Destruct Image.\n"; }
 
 bool Image::operator==(const Image &other) const {
   /**
@@ -248,7 +248,6 @@ Image get_image_with_ones(int channel, int height, int width) {
       }
     }
   }
-  // std::cout << (*img.pixels) << '\n';
   return img;
 }
 

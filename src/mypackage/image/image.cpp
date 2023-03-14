@@ -232,15 +232,20 @@ Image rgb_to_grayscale(const Image &img) {
       red = (*img.pixels)(0, y, x);
       green = (*img.pixels)(1, y, x);
       blue = (*img.pixels)(2, y, x);
+      // A standard RGB2GRAY equation.
       (*gray.pixels)(0, y, x) = 0.299 * red + 0.587 * green + 0.114 * blue;
     }
   }
-  // gray must be returned by copy but not by reference because it's out of
-  // scope.
+  /**
+   * gray cannot be returned by reference because it's out of scope. However, is
+   * it possible that gray can be moved to an object in caller function?
+   * Eg, caller_gray = std::move(rgb_to_grayscale(img));
+   */
   return gray;
 }
 
 Image get_image_with_ones(int channel, int height, int width) {
+  // TODO: There must be a BETTER way to set a tensor full of one.
   Image img{channel, height, width};
   for (int x = 0; x < img.width; x++) {
     for (int y = 0; y < img.height; y++) {

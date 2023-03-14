@@ -168,35 +168,37 @@ bool Image::operator==(const Image &other) const {
    * instead of two. The first implicit argument is "this". It does not change
    * the actual object that it is called on, so "const" is put at the end.
    */
+  // TODO: Use a BETTER way to compare two eigen tensors are the same or not.
   // If at least one element is not the same, set is_equal to false.
   bool is_equal = true;
   for (int x = 0; x < other.width; x++) {
     for (int y = 0; y < other.height; y++) {
       for (int c = 0; c < other.channels; c++) {
-        if (((*this->pixels)(c, y, x)) == (*other.pixels)(c, y, x)) {
+        if (((*pixels)(c, y, x)) == (*other.pixels)(c, y, x)) {
         } else {
           is_equal = false;
         }
       }
     }
   }
-  return this->width == other.width && this->height == other.height &&
-         this->channels == other.channels && size == other.size && is_equal;
+  return width == other.width && height == other.height &&
+         channels == other.channels && size == other.size && is_equal;
 }
 
-// save image as jpg file
 bool Image::save(std::string file_path) {
+  /**
+   * Save image as jpg or png file
+   */
   auto file_extension = std::filesystem::path(file_path).extension();
   // out_data will be sent to stb API which only takes raw pointer, so
-  // unique_ptr is not used here.
-  unsigned char *out_data =
-      new unsigned char[this->width * this->height * this->channels];
-  for (int x = 0; x < this->width; x++) {
-    for (int y = 0; y < this->height; y++) {
-      for (int c = 0; c < this->channels; c++) {
-        int dst_idx = y * this->width * this->channels + x * this->channels + c;
-        // Fill out_data with values range 0-255.
-        out_data[dst_idx] = std::roundf((*this->pixels)(c, y, x) * 255.);
+  // unique_ptr cannot be used here.
+  unsigned char *out_data = new unsigned char[width * height * channels];
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < height; y++) {
+      for (int c = 0; c < channels; c++) {
+        int dst_idx = y * width * channels + x * channels + c;
+        // Fill out_data with values range uint8 0-255.
+        out_data[dst_idx] = std::roundf((*pixels)(c, y, x) * 255.);
       }
     }
   }
@@ -204,13 +206,13 @@ bool Image::save(std::string file_path) {
   if (file_extension == std::string(".jpg") ||
       file_extension == std::string(".JPG")) {
     auto quality = 100;
-    success = stbi_write_jpg(file_path.c_str(), this->width, this->height,
-                             this->channels, out_data, quality);
+    success = stbi_write_jpg(file_path.c_str(), width, height, channels,
+                             out_data, quality);
   } else if (file_extension == std::string(".png") ||
              file_extension == std::string(".png")) {
     auto stride_in_bytes = this->width * this->channels;
-    success = stbi_write_png(file_path.c_str(), this->width, this->height,
-                             this->channels, out_data, stride_in_bytes);
+    success = stbi_write_png(file_path.c_str(), width, height, channels,
+                             out_data, stride_in_bytes);
   } else {
     std::cerr << "Unsupported file format: " << file_extension << "\n";
   }

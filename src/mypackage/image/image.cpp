@@ -20,8 +20,8 @@ Image::Image() : channels{0}, height{0}, width{0}, size{0}, pixels{nullptr} {
 
 Image::Image(std::string file_path) {
   std::clog << "The constructor takes a file path.\n";
-  unsigned char *img_data = stbi_load(file_path.c_str(), &this->width,
-                                      &this->height, &this->channels, 0);
+  unsigned char *img_data =
+      stbi_load(file_path.c_str(), &width, &height, &channels, 0);
   if (img_data == nullptr) {
     const char *error_msg = stbi_failure_reason();
     std::cerr << "Failed to load image: " << file_path.c_str() << "\n";
@@ -29,38 +29,36 @@ Image::Image(std::string file_path) {
     std::exit(1);
   }
 
-  this->pixels = std::make_unique<Eigen::Tensor<double, 3>>(
-      this->channels, this->height, this->width);
-  this->size = this->pixels->size();
+  pixels = std::make_unique<Eigen::Tensor<double, 3>>(channels, height, width);
+  size = pixels->size();
 
-  std::clog << "The image shape: " << this->channels << " x " << this->height
-            << " x " << this->width << '\n';
-  assert(this->size == this->channels * this->height * this->width);
-  // this->size = this->width * this->height * this->channels;
+  std::clog << "The image shape: " << channels << " x " << height << " x "
+            << width << '\n';
+  assert(size == channels * height * width);
 
-  for (int x = 0; x < this->width; x++) {
-    for (int y = 0; y < this->height; y++) {
-      for (int c = 0; c < this->channels; c++) {
-        // NOTE: the order
-        int src_idx = y * this->width * this->channels + x * this->channels + c;
-        (*this->pixels)(c, y, x) = img_data[src_idx] / 255.;
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < height; y++) {
+      for (int c = 0; c < channels; c++) {
+        // PNG's pixels format is mysterious for me.
+        std::size_t src_idx = y * width * channels + x * channels + c;
+        // Rescale uint8 to float 0-1.
+        (*pixels)(c, y, x) = img_data[src_idx] / 255.;
       }
     }
   }
-  if (this->channels == 4)
-    this->channels = 3; // ignore alpha channel
+  if (channels == 4)
+    channels = 3; // ignore alpha channel
   stbi_image_free(img_data);
 }
 
 Image::Image(int c, int h, int w)
     : channels{c}, height{h}, width{w}, size{c * h * w},
       pixels{std::make_unique<Eigen::Tensor<double, 3>>(c, h, w)} {
-  // NOTE: All members have been initialized.
   std::clog << "The constructor takes c, h, and w.\n";
-  // Assign 0 to pixels.
-  for (int x = 0; x < this->width; x++) {
-    for (int y = 0; y < this->height; y++) {
-      for (int c = 0; c < this->channels; c++) {
+  // TODO: There must be a BETTER way to reset pixels to 0.
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < height; y++) {
+      for (int c = 0; c < channels; c++) {
         (*pixels)(c, y, x) = 0;
       }
     }
@@ -72,9 +70,10 @@ Image::Image(const Image &other)
       size{other.size}, pixels{std::make_unique<Eigen::Tensor<double, 3>>(
                             other.channels, other.height, other.width)} {
   std::clog << "Copy Constructor\n";
-  for (int x = 0; x < this->width; x++) {
-    for (int y = 0; y < this->height; y++) {
-      for (int c = 0; c < this->channels; c++) {
+  // TODO: There must be a BETTER way to assign every elements.
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < height; y++) {
+      for (int c = 0; c < channels; c++) {
         (*pixels)(c, y, x) = (*other.pixels)(c, y, x);
       }
     }
@@ -88,9 +87,9 @@ Image &Image::operator=(const Image &other) {
      * means this->pixels points to nullptr. `this` could also have different
      * size as `other`'s. So, `this->pixels` shall be deleted, and it needs to
      * reallocate new memory with the size of `other`. However, we don't need to
-     * call unique_ptr::reset() to delete the object. `this->pixels` will be
-     * deleted automatically when `this->pixels` is redirected to another
-     * another memory location.
+     * call `unique_ptr::reset()` to delete the object. `this->pixels` will be
+     * deleted automatically when `unique_ptr` is redirected to another memory
+     * location.
      */
     // this->pixels.reset(); // delete the object, leaving this->pixels empty
     this->pixels = std::make_unique<Eigen::Tensor<double, 3>>(

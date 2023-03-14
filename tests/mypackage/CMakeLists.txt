@@ -1,6 +1,6 @@
 add_subdirectory(geometry)
-add_subdirectory(metric)
 add_subdirectory(image)
+add_subdirectory(metric)
 
 add_executable(calc_test calc_test.cpp)
 

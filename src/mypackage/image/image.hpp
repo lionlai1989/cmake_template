@@ -10,12 +10,13 @@ namespace mypackage::image {
 struct Image {
   Image();
 
-  // Only remove explicit if needed.
+  // explicit is always better than implicit.
   explicit Image(std::string file_path);
   explicit Image(int c, int h, int w);
   explicit Image(const Image &other);
+
   Image &operator=(const Image &other);
-  Image(Image &&other); // can not use explicit
+  Image(Image &&other);
   Image &operator=(Image &&other);
   ~Image();
   bool operator==(const Image &other) const;

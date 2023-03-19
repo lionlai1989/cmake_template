@@ -1,14 +1,15 @@
 # C++ project template with CMake
 
-As a software developer, it's important to have a strong foundation in C++ development, and that includes mastering CMake. While there are plenty of CMake tutorials out there, most of them focus on small projects, which may not be as practical for real-world applications. That's why I've created a C++ project template that includes all the important features needed for larger projects.
+Hey there! As a software engineer, I'm always striving to level up my C++ skills. And let me tell you, mastering CMake is an absolute must on that journey. Sure, there are loads of CMake tutorials out there, but most of them fall a bit short when it comes to bigger projects. Don't get me wrong, they're fantastic for getting the basics down. But when it comes to creating a real-world project, I found that I needed to combine multiple small tutorials to make it work. That's why I went ahead and put together this C++ project template with CMake. My hope is that I can use this template straight-up without having to manually cobble together a project from a bunch of small tutorials in the future.
+
+
 ## Description
 
-This project demonstrates how to use CMake and includes the following features:
+This project demonstrates how to use CMake and includes the usage of the following tools:
 - Eigen library
 - stb_image library
 - Namespace package
 - GoogleTest
-- Examples
 
 ## Getting Started
 

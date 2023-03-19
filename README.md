@@ -21,9 +21,19 @@ Before you start, you need to make sure you have the following dependencies inst
 * xtensor:
   * xtensor: git clone git@github.com:xtensor-stack/xtensor.git
   * xtl: git clone git@github.com:xtensor-stack/xtl.git
-  * xsimd: figure out how to do it.
-  * install xtensor: cmake -D CMAKE_INSTALL_PREFIX=/tmp/xtensor-install
-  * isntall xtl: cmake -D CMAKE_INSTALL_PREFIX=/tmp/xtl-install
+  * install xtensor:
+  ```
+  cmake -D CMAKE_INSTALL_PREFIX=/tmp/xtensor-install -DCMAKE_PREFIX_PATH=/tmp/xtl-install && make install
+  ```
+  * isntall xtl:
+  ```
+  cmake -D CMAKE_INSTALL_PREFIX=/tmp/xtl-install && make install
+  ```
+  * Install xsimd:
+  ```
+  cmake -D CMAKE_INSTALL_PREFIX=/tmp/xsimd-install && make install
+  ```
+  
 
 * **Development tools for Linux and VS Code:** To develop our project, we'll be using Linux and Visual Studio Code (VS Code). To have a smoother experience, you should install the following tools and extensions for VS Code:
   * `C/C++`

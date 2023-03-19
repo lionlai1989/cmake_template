@@ -18,6 +18,13 @@ Before you start, you need to make sure you have the following dependencies inst
 * **CMake 3.22.0 or higher:** If you don't have CMake installed, or if you need to update it, you can follow the instructions [here](https://askubuntu.com/questions/355565/how-do-i-install-the-latest-version-of-cmake-from-the-command-line). To use version 3.22, you can download it from https://cmake.org/files/v3.22/cmake-3.22.6.tar.gz.
 * [**Eigen library:**](https://gitlab.com/libeigen/eigen) This is a C++ library that we'll use in our project. Don't worry about installing it separately, as it's included as a git submodule in our repository.
 * [**stb image library:**](https://github.com/nothings/stb) This is a C library for loading and saving images. It's also included as a git submodule, so you don't need to do anything extra.
+* xtensor:
+  * xtensor: git clone git@github.com:xtensor-stack/xtensor.git
+  * xtl: git clone git@github.com:xtensor-stack/xtl.git
+  * xsimd: figure out how to do it.
+  * install xtensor: cmake -D CMAKE_INSTALL_PREFIX=/tmp/xtensor-install
+  * isntall xtl: cmake -D CMAKE_INSTALL_PREFIX=/tmp/xtl-install
+
 * **Development tools for Linux and VS Code:** To develop our project, we'll be using Linux and Visual Studio Code (VS Code). To have a smoother experience, you should install the following tools and extensions for VS Code:
   * `C/C++`
   * `C/C++ Extension`

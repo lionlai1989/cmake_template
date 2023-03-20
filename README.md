@@ -18,20 +18,21 @@ Before you start, you need to make sure you have the following dependencies inst
 * **CMake 3.22.0 or higher:** If you don't have CMake installed, or if you need to update it, you can follow the instructions [here](https://askubuntu.com/questions/355565/how-do-i-install-the-latest-version-of-cmake-from-the-command-line). To use version 3.22, you can download it from https://cmake.org/files/v3.22/cmake-3.22.6.tar.gz.
 * [**Eigen library:**](https://gitlab.com/libeigen/eigen) This is a C++ library that we'll use in our project. Don't worry about installing it separately, as it's included as a git submodule in our repository.
 * [**stb image library:**](https://github.com/nothings/stb) This is a C library for loading and saving images. It's also included as a git submodule, so you don't need to do anything extra.
-* xtensor:
-  * xtensor: git clone git@github.com:xtensor-stack/xtensor.git
-  * xtl: git clone git@github.com:xtensor-stack/xtl.git
-  * install xtensor:
+* **xtensor-assosiated library:** xtensor is a numpy for C++ library. All
+  required code is added as git submodules. Unlike eigen and stb library, I
+  can't figure out a way to just add folders to make cmake work. We need to
+  first install xtensor and then use it. Please follow the instruction below:
+  * Isntall xtl:
   ```
-  cmake -D CMAKE_INSTALL_PREFIX=/tmp/xtensor-install -DCMAKE_PREFIX_PATH=/tmp/xtl-install && make install
+  (cd extern/xtl && cmake -D CMAKE_INSTALL_PREFIX=/tmp/xtl-install && make install)
   ```
-  * isntall xtl:
+  * Install xtensor:
   ```
-  cmake -D CMAKE_INSTALL_PREFIX=/tmp/xtl-install && make install
+  (cd extern/xtensor && cmake -D CMAKE_INSTALL_PREFIX=/tmp/xtensor-install -DCMAKE_PREFIX_PATH=/tmp/xtl-install && make install)
   ```
   * Install xsimd:
   ```
-  cmake -D CMAKE_INSTALL_PREFIX=/tmp/xsimd-install && make install
+  (cd extern/xsimd && cmake -D CMAKE_INSTALL_PREFIX=/tmp/xsimd-install && make install)
   ```
   
 

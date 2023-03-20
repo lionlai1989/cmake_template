@@ -18,7 +18,7 @@ target_compile_features(calc_static PRIVATE cxx_std_17)
 add_library(rgb2gray_static STATIC)
 target_sources(rgb2gray_static PUBLIC rgb2gray.cpp)
 
-target_link_libraries(rgb2gray_static myimage)
+target_link_libraries(rgb2gray_static image_eigen image_xtensor)
 
 target_include_directories(rgb2gray_static PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/src)
 

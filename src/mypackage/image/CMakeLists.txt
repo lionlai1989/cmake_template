@@ -2,17 +2,17 @@
 
 # list(APPEND CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}"/extern/eigen-3.4.0")
 
-add_library(myimage STATIC)
+add_library(image_eigen STATIC)
 
-target_link_libraries (myimage Eigen3::Eigen)
+target_link_libraries (image_eigen Eigen3::Eigen)
 
 # This needs to be PUBLIC so it can be found by *.cpp in tests/.
-target_sources(myimage PUBLIC image.cpp)
-target_include_directories(myimage PUBLIC ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/extern)
+target_sources(image_eigen PUBLIC image_eigen.cpp)
+target_include_directories(image_eigen PUBLIC ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/extern)
 
-target_compile_features(myimage PRIVATE cxx_std_17)
+target_compile_features(image_eigen PRIVATE cxx_std_17)
 # NOTE: Using -Werror is not good if underlying libraries have warnings.
-target_compile_options(myimage PRIVATE -Wall -Wextra -Wpedantic)
+target_compile_options(image_eigen PRIVATE -Wall -Wextra -Wpedantic)
 
 add_library(image_xtensor STATIC)
 

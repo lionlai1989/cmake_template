@@ -1,37 +1,37 @@
 #ifndef IMAGE_XTENSOR_HPP
 #define IMAGE_XTENSOR_HPP
 
+#include <memory>
+#include <string>
 #include <xtensor/xarray.hpp>
 #include <xtensor/xio.hpp>
 #include <xtensor/xview.hpp>
-#include <memory>
-#include <string>
 
 namespace mypackage::image {
 
-struct ImageTensor {
-  ImageTensor();
+struct ImageXTensor {
+  ImageXTensor();
 
   // explicit is always better than implicit.
-  explicit ImageTensor(std::string file_path);
-  explicit ImageTensor(int c, int h, int w);
-  explicit ImageTensor(const ImageTensor &other);
+  explicit ImageXTensor(std::string file_path);
+  explicit ImageXTensor(std::size_t c, std::size_t h, std::size_t w);
+  explicit ImageXTensor(const ImageXTensor &other);
 
-  ImageTensor &operator=(const ImageTensor &other);
-  ImageTensor(ImageTensor &&other);
-  ImageTensor &operator=(ImageTensor &&other);
-  ~ImageTensor();
-  bool operator==(const ImageTensor &other) const;
+  ImageXTensor &operator=(const ImageXTensor &other);
+  ImageXTensor(ImageXTensor &&other);
+  ImageXTensor &operator=(ImageXTensor &&other);
+  ~ImageXTensor();
+  bool operator==(const ImageXTensor &other) const;
 
-  int channels; // aka comp in std_image
-  int height;
-  int width;
-  int size;
+  std::size_t channels; // aka comp in std_image
+  std::size_t height;
+  std::size_t width;
+  std::size_t size;
   std::unique_ptr<xt::xtensor<double, 3>> pixels;
   bool save(std::string file_path);
 };
 
-ImageTensor rgb_to_grayscale(const ImageTensor &img);
+ImageXTensor rgb_to_grayscale(const ImageXTensor &img);
 // ImageTensor get_image_with_ones(int channel, int height, int width);
 } // namespace mypackage::image
 

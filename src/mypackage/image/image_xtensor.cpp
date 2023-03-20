@@ -1,42 +1,72 @@
 #include <cassert>
 #include <cmath>
-#include <xtensor/xarray.hpp>
-#include <xtensor/xio.hpp>
-#include <xtensor/xview.hpp>
-
 #include <filesystem>
 #include <iostream>
 #include <mypackage/image/image_xtensor.hpp>
 #include <utility>
+#include <xtensor/xadapt.hpp>
+#include <xtensor/xarray.hpp>
+#include <xtensor/xio.hpp>
+#include <xtensor/xtensor.hpp>
+#include <xtensor/xview.hpp>
 
-#define STB_IMAGE_IMPLEMENTATION
+// #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
-#define STB_IMAGE_WRITE_IMPLEMENTATION
+//#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb/stb_image_write.h>
 
 namespace mypackage::image {
 
-ImageTensor::ImageTensor() : channels{0}, height{0}, width{0}, size{0}, pixels{nullptr} {
+ImageXTensor::ImageXTensor()
+    : channels{0}, height{0}, width{0}, size{0}, pixels{nullptr} {
   std::clog << "The default constructor takes no paramters.\n";
 }
 
-ImageTensor::ImageTensor(std::string file_path) {
-  // std::clog << "The constructor takes a file path.\n";
-  // unsigned char *img_data =
-  //     stbi_load(file_path.c_str(), &width, &height, &channels, 0);
-  // if (img_data == nullptr) {
-  //   const char *error_msg = stbi_failure_reason();
-  //   std::cerr << "Failed to load image: " << file_path.c_str() << "\n";
-  //   std::cerr << "Error msg (stb_image): " << error_msg << "\n";
-  //   std::exit(1);
-  // }
+ImageXTensor::ImageXTensor(std::string file_path) {
+  std::clog << "The constructor takes a file path.\n";
 
-  // pixels = std::make_unique<xt::xtensor<double, 3>>(channels, height, width);
-  // size = pixels->size();
+  int tmp_w{0};
+  int tmp_h{0};
+  int tmp_c{0};
 
-  // std::clog << "The image shape: " << channels << " x " << height << " x "
-  //           << width << '\n';
-  // assert(size == channels * height * width);
+  // std::unique_ptr<unsigned char[]> img_data(
+  //     stbi_load(file_path.c_str(), &tmp_w, &tmp_h, &tmp_c, 0));
+  unsigned char *img_data =
+      stbi_load(file_path.c_str(), &tmp_w, &tmp_h, &tmp_c, 0);
+  if (img_data == nullptr) {
+    const char *error_msg = stbi_failure_reason();
+    std::cerr << "Failed to load image: " << file_path.c_str() << "\n";
+    std::cerr << "Error msg (stb_image): " << error_msg << "\n";
+    std::exit(1);
+  }
+  channels = tmp_c;
+  height = tmp_h;
+  width = tmp_w;
+
+  pixels = std::make_unique<xt::xtensor<double, 3>>(
+      xt::zeros<double>({channels, height, width}));
+  size = pixels->size();
+
+  std::clog << "The image shape: " << channels << " x " << height << " x "
+            << width << '\n';
+  assert(size == channels * height * width);
+
+  xt::dynamic_shape<std::size_t> shape;
+  shape.push_back(channels);
+  shape.push_back(height);
+  shape.push_back(width);
+
+  pixels = std::make_unique<xt::xtensor<double, 3>>(
+      xt::zeros<double>({channels, height, width}));
+  std::copy(img_data, img_data + size, (*pixels).begin());
+  // auto img = xt::adapt<xt::layout_type::row_major>(img_data,
+  //                                                  {height, width,
+  //                                                  channels});
+  // auto img = xt::adapt_smart_ptr(img_data, {height, width, channels});
+  // pixels =
+  //     std::make_unique<xt::xtensor<double, 3>>(xt::cast<double>(img) /
+  //     255.0);
+  (*pixels) = (*pixels) / 255.0;
 
   // for (int x = 0; x < width; x++) {
   //   for (int y = 0; y < height; y++) {
@@ -48,45 +78,40 @@ ImageTensor::ImageTensor(std::string file_path) {
   //     }
   //   }
   // }
-  // if (channels == 4)
-  //   channels = 3; // ignore alpha channel
-  // stbi_image_free(img_data);
+  if (channels == 4)
+    channels = 3; // ignore alpha channel
+
+  // stbi_image_free(img_data.get());
+  stbi_image_free(img_data);
 }
 
-ImageTensor::ImageTensor(int c, int h, int w)
+ImageXTensor::ImageXTensor(std::size_t c, std::size_t h, std::size_t w)
     : channels{c}, height{h}, width{w}, size{c * h * w},
-      pixels{std::make_unique<xt::xtensor<double, 3>>(xt::zeros<double>({c, h, w}))} {
-  // std::clog << "The constructor takes c, h, and w.\n";
-  // // TODO: There must be a BETTER way to reset pixels to 0.
+      pixels{std::make_unique<xt::xtensor<double, 3>>(
+          xt::zeros<double>({c, h, w}))} {}
+
+ImageXTensor::ImageXTensor(const ImageXTensor &other)
+    : channels{other.channels}, height{other.height}, width{other.width},
+      size{other.size}, pixels{std::make_unique<xt::xtensor<double, 3>>(
+                            xt::zeros<double>(
+                                {other.channels, other.height, other.width}))} {
+  std::clog << "Copy Constructor\n";
+  /**
+   * Take advantage of copy assignment operator of Eigen::Tensor().
+   * How funny it is that we are not able to take advantage of copy constructor
+   * of Eigen::Tensor() here.
+   */
+  *pixels = *other.pixels;
   // for (int x = 0; x < width; x++) {
   //   for (int y = 0; y < height; y++) {
   //     for (int c = 0; c < channels; c++) {
-  //       (*pixels)(c, y, x) = 0;
+  //       (*pixels)(c, y, x) = (*other.pixels)(c, y, x);
   //     }
   //   }
   // }
 }
 
-ImageTensor::ImageTensor(const ImageTensor &other)
-    : channels{other.channels}, height{other.height}, width{other.width},
-      size{other.size}, pixels{std::make_unique<xt::xtensor<double, 3>>(xt::zeros<double>({other.channels, other.height, other.width}))} {
-  // std::clog << "Copy Constructor\n";
-  // /**
-  //  * Take advantage of copy assignment operator of Eigen::Tensor().
-  //  * How funny it is that we are not able to take advantage of copy constructor
-  //  * of Eigen::Tensor() here.
-  //  */
-  // *pixels = *other.pixels;
-  // // for (int x = 0; x < width; x++) {
-  // //   for (int y = 0; y < height; y++) {
-  // //     for (int c = 0; c < channels; c++) {
-  // //       (*pixels)(c, y, x) = (*other.pixels)(c, y, x);
-  // //     }
-  // //   }
-  // // }
-}
-
-ImageTensor &ImageTensor::operator=(const ImageTensor &other) {
+ImageXTensor &ImageXTensor::operator=(const ImageXTensor &other) {
   // std::clog << "Copy Assignment Operator\n";
   // if (this != &other) {
   //   channels = other.channels;
@@ -94,16 +119,22 @@ ImageTensor &ImageTensor::operator=(const ImageTensor &other) {
   //   width = other.width;
   //   size = other.size;
 
-  //   /** NOTE: `this` could be constructed from the default constructor, which
-  //    * means this->pixels points to nullptr. `this` could also have different
-  //    * size as `other`'s. So, `this->pixels` shall be deleted, and it needs to
-  //    * reallocate new memory with the size of `other`. However, we don't need to
-  //    * call `unique_ptr::reset()` to delete the object. `this->pixels` will be
-  //    * deleted automatically when `unique_ptr` is redirected to another memory
+  //   /** NOTE: `this` could be constructed from the default constructor,
+  //   which
+  //    * means this->pixels points to nullptr. `this` could also have
+  //    different
+  //    * size as `other`'s. So, `this->pixels` shall be deleted, and it needs
+  //    to
+  //    * reallocate new memory with the size of `other`. However, we don't
+  //    need to
+  //    * call `unique_ptr::reset()` to delete the object. `this->pixels` will
+  //    be
+  //    * deleted automatically when `unique_ptr` is redirected to another
+  //    memory
   //    * location.
   //    */
-  //   // this->pixels.reset(); // delete the object, leaving this->pixels empty
-  //   pixels = std::make_unique<xt::xtensor<double, 3>>(
+  //   // this->pixels.reset(); // delete the object, leaving this->pixels
+  //   empty pixels = std::make_unique<xt::xtensor<double, 3>>(
   //       other.channels, other.height, other.width);
   //   // Take advantage of copy assignment operator of Eigen::Tensor().
   //   *pixels = *other.pixels;
@@ -119,16 +150,19 @@ ImageTensor &ImageTensor::operator=(const ImageTensor &other) {
   // return *this;
 }
 
-ImageTensor::ImageTensor(ImageTensor &&other)
+ImageXTensor::ImageXTensor(ImageXTensor &&other)
     : channels{other.channels}, height{other.height}, width{other.width},
       size{other.size}, pixels{std::move(other.pixels)} {
   // /**
   //  * NOTE: When initializing `pixel`, `pixels{other.pixels}` can not be
-  //  * used. std::move() is needed to transfer the ownership from `other.pixels`
+  //  * used. std::move() is needed to transfer the ownership from
+  //  `other.pixels`
   //  * to `this.pixel`.
   //  * https://stackoverflow.com/questions/29194304/move-constructor-involving-const-unique-ptr
-  //  * Moreover, move constructor means that `this` is stealing the resource from
-  //  * `other`. Thus, we don't have to check if `this.pixels` points to nullptr or
+  //  * Moreover, move constructor means that `this` is stealing the resource
+  //  from
+  //  * `other`. Thus, we don't have to check if `this.pixels` points to
+  //  nullptr or
   //  * if the size of `this.pixels` is the same as `other.pixels`.
   //  */
   // std::clog << "Move Constructor\n";
@@ -141,7 +175,7 @@ ImageTensor::ImageTensor(ImageTensor &&other)
   // other.pixels = nullptr;
 }
 
-ImageTensor &ImageTensor::operator=(ImageTensor &&other) {
+ImageXTensor &ImageXTensor::operator=(ImageXTensor &&other) {
   // std::clog << "Move Assignment Operator\n";
   // if (this != &other) {
   //   channels = other.channels;
@@ -149,12 +183,15 @@ ImageTensor &ImageTensor::operator=(ImageTensor &&other) {
   //   width = other.width;
   //   size = other.size;
   //   /**
-  //    * NOTE: We don't need to check if `this->pixels` points to nullptr or the
+  //    * NOTE: We don't need to check if `this->pixels` points to nullptr or
+  //    the
   //    * size of `this->pixels` is the same as `other.pixels`, because
   //    * `this->pixels` is stealing the resource from `other.pixels`. And the
-  //    * resource that `this->pixels` currently owns will be deleted automatically
+  //    * resource that `this->pixels` currently owns will be deleted
+  //    automatically
   //    * when `this->pixels` points to another memory location.
-  //    * Also, we need to use std::move() to transfer the ownership of an object.
+  //    * Also, we need to use std::move() to transfer the ownership of an
+  //    object.
   //    * https://stackoverflow.com/questions/26318506/transferring-the-ownership-of-object-from-one-unique-ptr-to-another-unique-ptr-i
   //    * Finally, remember to reset other.
   //    */
@@ -168,15 +205,18 @@ ImageTensor &ImageTensor::operator=(ImageTensor &&other) {
   // return *this;
 }
 
-ImageTensor::~ImageTensor() { std::clog << "Destruct Image.\n"; }
+ImageXTensor::~ImageXTensor() { std::clog << "Destruct Image.\n"; }
 
-bool ImageTensor::operator==(const ImageTensor &other) const {
+bool ImageXTensor::operator==(const ImageXTensor &other) const {
   // /**
-  //  * NOTE: Overload is-equal-to operator. There is only one explicit argument
-  //  * instead of two. The first implicit argument is "this". It does not change
+  //  * NOTE: Overload is-equal-to operator. There is only one explicit
+  //  argument
+  //  * instead of two. The first implicit argument is "this". It does not
+  //  change
   //  * the actual object that it is called on, so "const" is put at the end.
   //  */
-  // // TODO: Use a BETTER way to compare two eigen tensors are the same or not.
+  // // TODO: Use a BETTER way to compare two eigen tensors are the same or
+  // not.
   // // If at least one element is not the same, set is_equal to false.
   // bool is_equal = true;
   // for (int x = 0; x < other.width; x++) {
@@ -193,45 +233,45 @@ bool ImageTensor::operator==(const ImageTensor &other) const {
   //        channels == other.channels && size == other.size && is_equal;
 }
 
-bool ImageTensor::save(std::string file_path) {
-  // /**
-  //  * Save image as jpg or png file
-  //  */
-  // auto file_extension = std::filesystem::path(file_path).extension();
-  // // out_data will be sent to stb API which only takes raw pointer, so
-  // // unique_ptr cannot be used here.
-  // unsigned char *out_data = new unsigned char[width * height * channels];
-  // for (int x = 0; x < width; x++) {
-  //   for (int y = 0; y < height; y++) {
-  //     for (int c = 0; c < channels; c++) {
-  //       int dst_idx = y * width * channels + x * channels + c;
-  //       // Fill out_data with values range uint8 0-255.
-  //       out_data[dst_idx] = std::roundf((*pixels)(c, y, x) * 255.);
-  //     }
-  //   }
-  // }
-  // bool success;
-  // if (file_extension == std::string(".jpg") ||
-  //     file_extension == std::string(".JPG")) {
-  //   auto quality = 100;
-  //   success = stbi_write_jpg(file_path.c_str(), width, height, channels,
-  //                            out_data, quality);
-  // } else if (file_extension == std::string(".png") ||
-  //            file_extension == std::string(".png")) {
-  //   auto stride_in_bytes = width * channels;
-  //   success = stbi_write_png(file_path.c_str(), width, height, channels,
-  //                            out_data, stride_in_bytes);
-  // } else {
-  //   std::cerr << "Unsupported file format: " << file_extension << "\n";
-  // }
-  // if (!success)
-  //   std::cerr << "Failed to save image: " << file_path << "\n";
+bool ImageXTensor::save(std::string file_path) {
+  /**
+   * Save image as jpg or png file
+   */
+  auto file_extension = std::filesystem::path(file_path).extension();
+  // out_data will be sent to stb API which only takes raw pointer, so
+  // unique_ptr cannot be used here.
+  unsigned char *out_data = new unsigned char[width * height * channels];
+  for (int x = 0; x < width; x++) {
+    for (int y = 0; y < height; y++) {
+      for (int c = 0; c < channels; c++) {
+        int dst_idx = y * width * channels + x * channels + c;
+        // Fill out_data with values range uint8 0-255.
+        out_data[dst_idx] = std::roundf((*pixels)(c, y, x) * 255.);
+      }
+    }
+  }
+  bool success;
+  if (file_extension == std::string(".jpg") ||
+      file_extension == std::string(".JPG")) {
+    auto quality = 100;
+    success = stbi_write_jpg(file_path.c_str(), width, height, channels,
+                             out_data, quality);
+  } else if (file_extension == std::string(".png") ||
+             file_extension == std::string(".png")) {
+    auto stride_in_bytes = width * channels;
+    success = stbi_write_png(file_path.c_str(), width, height, channels,
+                             out_data, stride_in_bytes);
+  } else {
+    std::cerr << "Unsupported file format: " << file_extension << "\n";
+  }
+  if (!success)
+    std::cerr << "Failed to save image: " << file_path << "\n";
 
-  // delete[] out_data;
-  // return true;
+  delete[] out_data;
+  return true;
 }
 
-ImageTensor rgb_to_grayscale(const ImageTensor &img) {
+ImageXTensor rgb_to_grayscale(const ImageXTensor &img) {
   // assert(img.channels == 3);
   // ImageTensor gray(1, img.height, img.width);
   // for (int x = 0; x < img.width; x++) {
@@ -245,7 +285,8 @@ ImageTensor rgb_to_grayscale(const ImageTensor &img) {
   //   }
   // }
   // /**
-  //  * gray cannot be returned by reference because it's out of scope. However, is
+  //  * gray cannot be returned by reference because it's out of scope.
+  //  However, is
   //  * it possible that gray can be moved to an object in caller function?
   //  * Eg, caller_gray = std::move(rgb_to_grayscale(img));
   //  */

@@ -4,7 +4,7 @@
 #include <eigen-3.4.0/unsupported/Eigen/CXX11/Tensor>
 #include <filesystem>
 #include <iostream>
-#include <mypackage/image/image.hpp>
+#include <mypackage/image/image_eigen.hpp>
 #include <utility>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -14,11 +14,12 @@
 
 namespace mypackage::image {
 
-Image::Image() : channels{0}, height{0}, width{0}, size{0}, pixels{nullptr} {
+ImageEigen::ImageEigen()
+    : channels{0}, height{0}, width{0}, size{0}, pixels{nullptr} {
   std::clog << "The default constructor takes no paramters.\n";
 }
 
-Image::Image(std::string file_path) {
+ImageEigen::ImageEigen(std::string file_path) {
   std::clog << "The constructor takes a file path.\n";
   unsigned char *img_data =
       stbi_load(file_path.c_str(), &width, &height, &channels, 0);
@@ -51,7 +52,7 @@ Image::Image(std::string file_path) {
   stbi_image_free(img_data);
 }
 
-Image::Image(int c, int h, int w)
+ImageEigen::ImageEigen(int c, int h, int w)
     : channels{c}, height{h}, width{w}, size{c * h * w},
       pixels{std::make_unique<Eigen::Tensor<double, 3>>(c, h, w)} {
   std::clog << "The constructor takes c, h, and w.\n";
@@ -65,7 +66,7 @@ Image::Image(int c, int h, int w)
   }
 }
 
-Image::Image(const Image &other)
+ImageEigen::ImageEigen(const ImageEigen &other)
     : channels{other.channels}, height{other.height}, width{other.width},
       size{other.size}, pixels{std::make_unique<Eigen::Tensor<double, 3>>(
                             other.channels, other.height, other.width)} {
@@ -85,7 +86,7 @@ Image::Image(const Image &other)
   // }
 }
 
-Image &Image::operator=(const Image &other) {
+ImageEigen &ImageEigen::operator=(const ImageEigen &other) {
   std::clog << "Copy Assignment Operator\n";
   if (this != &other) {
     channels = other.channels;
@@ -118,7 +119,7 @@ Image &Image::operator=(const Image &other) {
   return *this;
 }
 
-Image::Image(Image &&other)
+ImageEigen::ImageEigen(ImageEigen &&other)
     : channels{other.channels}, height{other.height}, width{other.width},
       size{other.size}, pixels{std::move(other.pixels)} {
   /**
@@ -140,7 +141,7 @@ Image::Image(Image &&other)
   other.pixels = nullptr;
 }
 
-Image &Image::operator=(Image &&other) {
+ImageEigen &ImageEigen::operator=(ImageEigen &&other) {
   std::clog << "Move Assignment Operator\n";
   if (this != &other) {
     channels = other.channels;
@@ -167,9 +168,9 @@ Image &Image::operator=(Image &&other) {
   return *this;
 }
 
-Image::~Image() { std::clog << "Destruct Image.\n"; }
+ImageEigen::~ImageEigen() { std::clog << "Destruct Image.\n"; }
 
-bool Image::operator==(const Image &other) const {
+bool ImageEigen::operator==(const ImageEigen &other) const {
   /**
    * NOTE: Overload is-equal-to operator. There is only one explicit argument
    * instead of two. The first implicit argument is "this". It does not change
@@ -192,7 +193,7 @@ bool Image::operator==(const Image &other) const {
          channels == other.channels && size == other.size && is_equal;
 }
 
-bool Image::save(std::string file_path) {
+bool ImageEigen::save(std::string file_path) {
   /**
    * Save image as jpg or png file
    */
@@ -230,9 +231,9 @@ bool Image::save(std::string file_path) {
   return true;
 }
 
-Image rgb_to_grayscale(const Image &img) {
+ImageEigen rgb_to_grayscale(const ImageEigen &img) {
   assert(img.channels == 3);
-  Image gray(1, img.height, img.width);
+  ImageEigen gray(1, img.height, img.width);
   for (int x = 0; x < img.width; x++) {
     for (int y = 0; y < img.height; y++) {
       double red, green, blue;
@@ -251,9 +252,9 @@ Image rgb_to_grayscale(const Image &img) {
   return gray;
 }
 
-Image get_image_with_ones(int channel, int height, int width) {
+ImageEigen get_image_with_ones(int channel, int height, int width) {
   // TODO: There must be a BETTER way to set a tensor full of one.
-  Image img{channel, height, width};
+  ImageEigen img{channel, height, width};
   for (int x = 0; x < img.width; x++) {
     for (int y = 0; y < img.height; y++) {
       for (int c = 0; c < img.channels; c++) {

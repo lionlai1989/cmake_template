@@ -1,14 +1,14 @@
-add_executable(test_image test_image.cpp)
+add_executable(test_image_eigen test_image_eigen.cpp)
 
 target_link_libraries(
-  test_image
+  test_image_eigen
   GTest::gtest_main
-  myimage
+  image_eigen
 )
 
-target_include_directories(test_image PUBLIC ${CMAKE_SOURCE_DIR}/src)
+target_include_directories(test_image_eigen PUBLIC ${CMAKE_SOURCE_DIR}/src)
 
-target_compile_features(test_image PRIVATE cxx_std_17)
+target_compile_features(test_image_eigen PRIVATE cxx_std_17)
 
 include(GoogleTest)
-gtest_discover_tests(test_image)
+gtest_discover_tests(test_image_eigen)

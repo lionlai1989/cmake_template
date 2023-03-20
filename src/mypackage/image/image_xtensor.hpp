@@ -31,7 +31,7 @@ struct ImageXTensor {
   bool save(std::string file_path);
 };
 
-ImageXTensor rgb_to_grayscale(const ImageXTensor &img);
+ImageXTensor rgb_to_grayscale_xtensor(const ImageXTensor &img);
 // ImageTensor get_image_with_ones(int channel, int height, int width);
 } // namespace mypackage::image
 

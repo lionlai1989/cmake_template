@@ -15,7 +15,7 @@ bool rgb2gray_image_eigen(std::string input, std::string output) {
 
 bool rgb2gray_image_xtensor(std::string input, std::string output) {
   mypackage::image::ImageXTensor in_img{input};
-  auto out_img = mypackage::image::rgb_to_grayscale(in_img);
+  auto out_img = mypackage::image::rgb_to_grayscale_xtensor(in_img);
   out_img.save(output);
   return 0;
 }

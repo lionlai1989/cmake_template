@@ -49,14 +49,17 @@ ImageXTensor::ImageXTensor(std::string file_path) {
             << width << '\n';
   assert(size == channels * height * width);
 
-  xt::dynamic_shape<std::size_t> shape;
-  shape.push_back(channels);
-  shape.push_back(height);
-  shape.push_back(width);
+  // xt::dynamic_shape<std::size_t> shape;
+  // shape.push_back(channels);
+  // shape.push_back(height);
+  // shape.push_back(width);
 
   pixels = std::make_unique<xt::xtensor<double, 3>>(
-      xt::zeros<double>({channels, height, width}));
+      xt::zeros<double>({height, channels,width}));
+
+  // xt::adapt(img_data, size, *pixels);
   std::copy(img_data, img_data + size, (*pixels).begin());
+  
   // auto img = xt::adapt<xt::layout_type::row_major>(img_data,
   //                                                  {height, width,
   //                                                  channels});
@@ -76,8 +79,8 @@ ImageXTensor::ImageXTensor(std::string file_path) {
   //     }
   //   }
   // }
-  if (channels == 4)
-    channels = 3; // ignore alpha channel
+  // if (channels == 4)
+  //   channels = 3; // ignore alpha channel
 
   // stbi_image_free(img_data.get());
   stbi_image_free(img_data);
@@ -218,7 +221,7 @@ bool ImageXTensor::save(std::string file_path) {
   auto file_extension = std::filesystem::path(file_path).extension();
   // out_data will be sent to stb API which only takes raw pointer, so
   // unique_ptr cannot be used here.
-  // unsigned char *out_data = new unsigned char[width * height * channels];
+  unsigned char *out_data = new unsigned char[width * height * channels];
   // for (int x = 0; x < width; x++) {
   //   for (int y = 0; y < height; y++) {
   //     for (int c = 0; c < channels; c++) {
@@ -228,10 +231,16 @@ bool ImageXTensor::save(std::string file_path) {
   //     }
   //   }
   // }
+  
+  //auto tmp = xt::round((*pixels) * 255.);
+  xt::xtensor<double, 3> scaled_arr = (*pixels) * 255.;
+  xt::xtensor<unsigned char, 3> rounded_arr = xt::round(scaled_arr);
+  unsigned char* c_arr = reinterpret_cast<unsigned char*>(rounded_arr.data());
 
-  auto img_view = xt::adapt((*pixels).data(), (*pixels).size());
-  xt::xtensor<unsigned char, 1> out_data =
-      xt::cast<unsigned char>(xt::round(img_view * 255.0));
+  
+  // auto img_view = xt::adapt((*pixels).data(), (*pixels).size());
+  // xt::xtensor<unsigned char, 1> out_data =
+  //     xt::cast<unsigned char>(xt::round(img_view * 255.0));
   // auto tmp = xt::round((*pixels) * 255.);
   // auto img_view = xt::adapt(xt::eval(tmp).data(), xt::eval(tmp).size());
 
@@ -240,33 +249,35 @@ bool ImageXTensor::save(std::string file_path) {
       file_extension == std::string(".JPG")) {
     auto quality = 100;
     success = stbi_write_jpg(file_path.c_str(), width, height, channels,
-                             out_data.data(), quality);
+                             c_arr, quality);
   } else if (file_extension == std::string(".png") ||
              file_extension == std::string(".png")) {
     auto stride_in_bytes = width * channels;
     success = stbi_write_png(file_path.c_str(), width, height, channels,
-                             out_data.data(), stride_in_bytes);
+                             c_arr, stride_in_bytes);
   } else {
     std::cerr << "Unsupported file format: " << file_extension << "\n";
   }
   if (!success)
     std::cerr << "Failed to save image: " << file_path << "\n";
 
-  // delete[] out_data;
+  delete[] out_data;
   return true;
 }
 
 ImageXTensor rgb_to_grayscale_xtensor(const ImageXTensor &img) {
-  assert(img.channels == 3);
-  ImageXTensor gray(1, img.height, img.width);
-  for (int x = 0; x < img.width; x++) {
-    for (int y = 0; y < img.height; y++) {
+  // assert(img.channels == 3);
+  //ImageXTensor gray(1, img.height, img.width);
+  ImageXTensor gray(img.height, 1, img.width);
+  // NOTE: USE gray.pixels = img(0, :, :)*0.299 + img(1, :, :)*0.587 + img(2, :, :)*0.114
+  for (auto x = 0; x < img.width; x++) {
+    for (auto y = 0; y < img.height; y++) {
       double red, green, blue;
-      red = (*img.pixels)(0, y, x);
-      green = (*img.pixels)(1, y, x);
-      blue = (*img.pixels)(2, y, x);
+      red = (*img.pixels)(y, 0, x);
+      green = (*img.pixels)(y, 1, x);
+      blue = (*img.pixels)(y, 2, x);
       // A standard RGB2GRAY equation.
-      (*gray.pixels)(0, y, x) = 0.299 * red + 0.587 * green + 0.114 * blue;
+      (*gray.pixels)(y, 0, x) = 0.299 * red + 0.587 * green + 0.114 * blue;
     }
   }
   /**
@@ -277,17 +288,5 @@ ImageXTensor rgb_to_grayscale_xtensor(const ImageXTensor &img) {
   return gray;
 }
 
-// Image get_image_with_ones(int channel, int height, int width) {
-//   // TODO: There must be a BETTER way to set a tensor full of one.
-//   Image img{channel, height, width};
-//   for (int x = 0; x < img.width; x++) {
-//     for (int y = 0; y < img.height; y++) {
-//       for (int c = 0; c < img.channels; c++) {
-//         (*img.pixels)(c, y, x) = 1.0;
-//       }
-//     }
-//   }
-//   return img;
-// }
 
 } // namespace mypackage::image

@@ -231,7 +231,7 @@ bool ImageEigen::save(std::string file_path) {
   return true;
 }
 
-ImageEigen rgb_to_grayscale(const ImageEigen &img) {
+ImageEigen rgb_to_grayscale_eigen(const ImageEigen &img) {
   assert(img.channels == 3);
   ImageEigen gray(1, img.height, img.width);
   for (int x = 0; x < img.width; x++) {

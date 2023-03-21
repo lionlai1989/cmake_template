@@ -1,5 +1,5 @@
-#ifndef IMAGE_HPP
-#define IMAGE_HPP
+#ifndef IMAGE_EIGEN_HPP
+#define IMAGE_EIGEN_HPP
 
 #include <eigen-3.4.0/unsupported/Eigen/CXX11/Tensor>
 #include <memory>

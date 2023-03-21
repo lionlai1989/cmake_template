@@ -218,34 +218,41 @@ bool ImageXTensor::save(std::string file_path) {
   auto file_extension = std::filesystem::path(file_path).extension();
   // out_data will be sent to stb API which only takes raw pointer, so
   // unique_ptr cannot be used here.
-  unsigned char *out_data = new unsigned char[width * height * channels];
-  for (int x = 0; x < width; x++) {
-    for (int y = 0; y < height; y++) {
-      for (int c = 0; c < channels; c++) {
-        int dst_idx = y * width * channels + x * channels + c;
-        // Fill out_data with values range uint8 0-255.
-        out_data[dst_idx] = std::roundf((*pixels)(c, y, x) * 255.);
-      }
-    }
-  }
+  // unsigned char *out_data = new unsigned char[width * height * channels];
+  // for (int x = 0; x < width; x++) {
+  //   for (int y = 0; y < height; y++) {
+  //     for (int c = 0; c < channels; c++) {
+  //       int dst_idx = y * width * channels + x * channels + c;
+  //       // Fill out_data with values range uint8 0-255.
+  //       out_data[dst_idx] = std::roundf((*pixels)(c, y, x) * 255.);
+  //     }
+  //   }
+  // }
+
+  auto img_view = xt::adapt((*pixels).data(), (*pixels).size());
+  xt::xtensor<unsigned char, 1> out_data =
+      xt::cast<unsigned char>(xt::round(img_view * 255.0));
+  // auto tmp = xt::round((*pixels) * 255.);
+  // auto img_view = xt::adapt(xt::eval(tmp).data(), xt::eval(tmp).size());
+
   bool success;
   if (file_extension == std::string(".jpg") ||
       file_extension == std::string(".JPG")) {
     auto quality = 100;
     success = stbi_write_jpg(file_path.c_str(), width, height, channels,
-                             out_data, quality);
+                             out_data.data(), quality);
   } else if (file_extension == std::string(".png") ||
              file_extension == std::string(".png")) {
     auto stride_in_bytes = width * channels;
     success = stbi_write_png(file_path.c_str(), width, height, channels,
-                             out_data, stride_in_bytes);
+                             out_data.data(), stride_in_bytes);
   } else {
     std::cerr << "Unsupported file format: " << file_extension << "\n";
   }
   if (!success)
     std::cerr << "Failed to save image: " << file_path << "\n";
 
-  delete[] out_data;
+  // delete[] out_data;
   return true;
 }
 

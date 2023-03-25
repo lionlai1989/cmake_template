@@ -21,7 +21,7 @@ struct ImageXTensor {
   ImageXTensor(ImageXTensor &&other);
   ImageXTensor &operator=(ImageXTensor &&other);
   ~ImageXTensor();
-  // bool operator==(const ImageXTensor &other) const;
+  bool operator==(const ImageXTensor &other) const;
 
   int channels; // aka comp in std_image
   int height;

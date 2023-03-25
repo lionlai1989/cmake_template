@@ -21,12 +21,12 @@ struct ImageXTensor {
   ImageXTensor(ImageXTensor &&other);
   ImageXTensor &operator=(ImageXTensor &&other);
   ~ImageXTensor();
-  bool operator==(const ImageXTensor &other) const;
+  // bool operator==(const ImageXTensor &other) const;
 
-  std::size_t channels; // aka comp in std_image
-  std::size_t height;
-  std::size_t width;
-  std::size_t size;
+  int channels; // aka comp in std_image
+  int height;
+  int width;
+  int size;
   std::unique_ptr<xt::xtensor<double, 3>> pixels;
   bool save(std::string file_path);
 };

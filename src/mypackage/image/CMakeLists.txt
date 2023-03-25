@@ -1,7 +1,7 @@
 # set(CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/extern/eigen-3.4.0)
 
 # list(APPEND CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}"/extern/eigen-3.4.0")
-
+add_executable(test_xtensor test_xtensor.cpp)
 add_library(image_eigen STATIC)
 
 target_link_libraries (image_eigen Eigen3::Eigen)
@@ -17,6 +17,8 @@ target_compile_options(image_eigen PRIVATE -Wall -Wextra -Wpedantic)
 add_library(image_xtensor STATIC)
 
 target_link_libraries (image_xtensor xtensor xtensor::optimize xtensor::use_xsimd)
+target_link_libraries (test_xtensor xtensor xtensor::optimize xtensor::use_xsimd)
+
 target_sources(image_xtensor PUBLIC image_xtensor.cpp)
 target_include_directories(image_xtensor PUBLIC ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/extern)
 

@@ -8,13 +8,14 @@ namespace mypackage {
 
 bool rgb2gray_image_eigen(std::string input, std::string output) {
   mypackage::image::ImageEigen in_img{input};
-  auto out_img = mypackage::image::rgb_to_grayscale(in_img);
+  auto out_img = mypackage::image::rgb_to_grayscale_eigen(in_img);
   out_img.save(output);
   return 0;
 }
 
 bool rgb2gray_image_xtensor(std::string input, std::string output) {
   mypackage::image::ImageXTensor in_img{input};
+  //in_img.save(output);
   auto out_img = mypackage::image::rgb_to_grayscale_xtensor(in_img);
   out_img.save(output);
   return 0;

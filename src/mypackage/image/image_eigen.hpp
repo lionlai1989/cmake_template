@@ -29,7 +29,7 @@ struct ImageEigen {
   bool save(std::string file_path);
 };
 
-ImageEigen rgb_to_grayscale(const ImageEigen &img);
+ImageEigen rgb_to_grayscale_eigen(const ImageEigen &img);
 ImageEigen get_image_with_ones(int channel, int height, int width);
 } // namespace mypackage::image
 

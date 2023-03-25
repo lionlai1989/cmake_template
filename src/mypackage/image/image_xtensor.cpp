@@ -281,4 +281,49 @@ ImageXTensor rgb_to_grayscale_xtensor(const ImageXTensor &img) {
   return gray;
 }
 
+ImageXTensor gaussian_blur(const ImageXTensor &img, double sigma) {
+  assert(img.channels == 1);
+
+  int size = std::ceil(6 * sigma);
+  if (size % 2 == 0)
+    size++;
+  int center = size / 2;
+  ImageXTensor kernel(size, 1, 1);
+  double sum = 0;
+  for (int k = -size / 2; k <= size / 2; k++) {
+    double val = std::exp(-(k * k) / (2 * sigma * sigma));
+    // kernel.set_pixel(center + k, 0, 0, val);
+    sum += val;
+  }
+  for (int k = 0; k < size; k++)
+    // kernel.data[k] /= sum;
+
+    ImageXTensor tmp(img.width, img.height, 1);
+  ImageXTensor filtered(img.width, img.height, 1);
+
+  // convolve vertical
+  for (int x = 0; x < img.width; x++) {
+    for (int y = 0; y < img.height; y++) {
+      double sum = 0;
+      for (int k = 0; k < size; k++) {
+        int dy = -center + k;
+        // sum += img.get_pixel(x, y + dy, 0) * kernel.data[k];
+      }
+      // tmp.set_pixel(x, y, 0, sum);
+    }
+  }
+  // convolve horizontal
+  for (int x = 0; x < img.width; x++) {
+    for (int y = 0; y < img.height; y++) {
+      double sum = 0;
+      for (int k = 0; k < size; k++) {
+        int dx = -center + k;
+        // sum += tmp.get_pixel(x + dx, y, 0) * kernel.data[k];
+      }
+      // filtered.set_pixel(x, y, 0, sum);
+    }
+  }
+  return filtered;
+}
+
 } // namespace mypackage::image

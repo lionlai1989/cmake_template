@@ -14,7 +14,7 @@ struct ImageXTensor {
 
   // explicit is always better than implicit.
   explicit ImageXTensor(std::string file_path);
-  explicit ImageXTensor(std::size_t c, std::size_t h, std::size_t w);
+  explicit ImageXTensor(int c, int h, int w);
   explicit ImageXTensor(const ImageXTensor &other);
 
   ImageXTensor &operator=(const ImageXTensor &other);

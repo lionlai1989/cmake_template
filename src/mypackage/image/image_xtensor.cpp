@@ -12,7 +12,7 @@
 
 // #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
-//#define STB_IMAGE_WRITE_IMPLEMENTATION
+// #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb/stb_image_write.h>
 
 namespace mypackage::image {
@@ -91,7 +91,7 @@ ImageXTensor::ImageXTensor(std::string file_path) {
   stbi_image_free(img_data);
 }
 
-ImageXTensor::ImageXTensor(std::size_t c, std::size_t h, std::size_t w)
+ImageXTensor::ImageXTensor(int c, int h, int w)
     : channels{c}, height{h}, width{w}, size{c * h * w},
       pixels{std::make_unique<xt::xtensor<double, 3>>(
           xt::zeros<double>({c, h, w}))} {}

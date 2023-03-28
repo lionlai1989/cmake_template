@@ -131,9 +131,8 @@ ImageXTensor::ImageXTensor(ImageXTensor &&other)
       size{other.size}, pixels{std::move(other.pixels)} {
   /**
    * NOTE: When initializing `pixel`, `pixels{other.pixels}` can not be
-   * used. std::move() is needed to transfer the ownership from
-   `other.pixels`
-   * to `this.pixel`.
+   * used. std::move() is needed to in order to transfer the ownership from
+   * `other.pixels` to `this.pixel`.
    * https://stackoverflow.com/questions/29194304/move-constructor-involving-const-unique-ptr
    * Moreover, move constructor means that `this` is stealing the resource from
    * `other`. Thus, we don't have to check if `this.pixels` points to nullptr or

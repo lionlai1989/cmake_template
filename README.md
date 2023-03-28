@@ -73,8 +73,8 @@ If you forgot to use the `--recursive` option when cloning, you can still clone 
 - Execute  
   The installation can be tested with the following command:
   ```
-  /tmp/install-test/bin/rgb2gray -i /tmp/install-test/bin/book_in_scene.jpg -o ./book_in_scene_gray.jpg
-  /tmp/install-test/bin/rgb2gray -i /tmp/install-test/bin/book.png -o ./book_gray.png
+  /tmp/install-test/bin/rgb2gray -i /tmp/install-test/bin/book_in_scene.jpg -o ./book_in_scene_gray.jpg -m eigen
+  /tmp/install-test/bin/rgb2gray -i /tmp/install-test/bin/book.png -o ./book_gray.png -m xtensor
   ```
   It will create two grayscale images,`book_in_scene_gray.jpg` and `book_gray.png` in your current folder.
 

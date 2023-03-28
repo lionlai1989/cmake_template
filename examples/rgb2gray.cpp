@@ -37,9 +37,16 @@ int main(int argc, char **argv) {
   InputParser input(argc, argv);
   const std::string &rgb_path = input.getCmdOption("-i");
   const std::string &gray_path = input.getCmdOption("-o");
+  const std::string &method = input.getCmdOption("-m");
   std::cout << "Convert the RGB file " << rgb_path << " to the grayscale file "
             << gray_path << '\n';
-  // mypackage::rgb2gray_image_eigen(rgb_path, gray_path);
-  mypackage::rgb2gray_image_xtensor(rgb_path, gray_path);
+
+  if (method == "eigen") {
+    mypackage::rgb2gray_image_eigen(rgb_path, gray_path);
+  } else if (method == "xtensor") {
+    mypackage::rgb2gray_image_xtensor(rgb_path, gray_path);
+  } else {
+    std::cerr << "Unsuppported rgb2gray method.";
+  }
   return 0;
 }

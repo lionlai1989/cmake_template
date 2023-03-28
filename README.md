@@ -6,8 +6,9 @@ Hey there! As a software engineer, I'm always striving to level up my C++ skills
 ## Description
 
 This project demonstrates how to use CMake and includes the usage of the following tools:
-- Eigen library
-- stb_image library
+- [eigen library](https://gitlab.com/libeigen/eigen)
+- [stb image library](https://github.com/nothings/stb)
+- [xtensor library](https://github.com/xtensor-stack/xtensor)
 - Namespace package
 - GoogleTest
 
@@ -16,11 +17,11 @@ This project demonstrates how to use CMake and includes the usage of the followi
 ### Dependencies
 Before you start, you need to make sure you have the following dependencies installed:
 * **CMake 3.22.0 or higher:** If you don't have CMake installed, or if you need to update it, you can follow the instructions [here](https://askubuntu.com/questions/355565/how-do-i-install-the-latest-version-of-cmake-from-the-command-line). To use version 3.22, you can download it from https://cmake.org/files/v3.22/cmake-3.22.6.tar.gz.
-* [**Eigen library:**](https://gitlab.com/libeigen/eigen) This is a C++ library that we'll use in our project. Don't worry about installing it separately, as it's included as a git submodule in our repository.
-* [**stb image library:**](https://github.com/nothings/stb) This is a C library for loading and saving images. It's also included as a git submodule, so you don't need to do anything extra.
+* **Eigen library:** This is a C++ library that we'll use in our project. Don't worry about installing it separately, as it's included as a git submodule in our repository.
+* **stb image library:** This is a C library for loading and saving images. It's also included as a git submodule, so you don't need to do anything extra.
 * **xtensor-assosiated library:** xtensor is a numpy for C++ library. All
   required code is added as git submodules. Unlike eigen and stb library, I
-  can't figure out a way to just add folders to make cmake work. We need to
+  can't figure out a way to just add folders to make CMake work. We need to
   first install xtensor and then use it. Please follow the instruction below:
   * Isntall xtl:
   ```
@@ -47,7 +48,9 @@ Before you start, you need to make sure you have the following dependencies inst
   * `python3-dev` (install this with apt install python3-dev)
 
 ### Downloading
-* To download the repository, run the following command: `git clone --recursive https://github.com/lionlai1989/cmake_template.git`. If you forget to use the `--recursive` option when cloning, you can still clone the submodules by running the command `git submodule update --init --recursive`.
+* To download this repository, run the following command:
+```git clone --recursive https://github.com/lionlai1989/cmake_template.git```
+If you forgot to use the `--recursive` option when cloning, you can still clone the submodules by running the command `git submodule update --init --recursive`.
 
 ### Build, Install and Execute
 - Build:  
@@ -57,7 +60,7 @@ Before you start, you need to make sure you have the following dependencies inst
   ```
   If the build is successful, the tests will be run automatically and you should see the message:
   ```
-  100% tests passed, 0 tests failed out of 4
+  100% tests passed, 0 tests failed out of 5
   ```
 
 - Install  

@@ -28,11 +28,13 @@ struct ImageXTensor {
   int width;
   int size;
   std::unique_ptr<xt::xtensor<double, 3>> pixels;
+
   bool save(std::string file_path);
+  void swap(ImageXTensor &other);
 };
 
 ImageXTensor rgb_to_grayscale_xtensor(const ImageXTensor &img);
-ImageXTensor gaussian_blur(const ImageXTensor &img, double sigma);
+
 } // namespace mypackage::image
 
 #endif

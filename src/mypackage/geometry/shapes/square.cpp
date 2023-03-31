@@ -4,7 +4,9 @@
 
 namespace mypackage::geometry::shapes {
 
-Square::Square(double length) { side_length = mypackage::metric::inch2mm(length); }
+Square::Square(double length) {
+  side_length = mypackage::metric::inch2mm(length);
+}
 
 void Square::display() {
   std::cout << "A square with side length: " << this->side_length << " mm.\n";

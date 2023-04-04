@@ -87,19 +87,17 @@ If you forgot to use the `--recursive` option when cloning, you can still clone 
 - Future Developments:  
   In the future, there are plans to expand this project to include additional example libraries to further explore their use. These libraries include libvips, CImg, terrasect, and opencv. Additionally, the code will be further improved by utilizing tools such as Clang Static Analyzer and clang-tidy to identify potential issues and enhance overall code quality.
 
-## Help
+## Contributing
 
-If you need any help, have any feedback or comments, or have questions about this project, please don't hesitate to create an issue in this repository. We will try to respond to your inquiry as soon as possible.
+Your feedback, comments, and questions about this project are welcome, as are any contributions you'd like to make. Please feel free to create an issue or a pull request in this repository. Together, let's improve this template and make life easier for C++ programmers.
+
 ## Authors
 
 [@lionlai](https://github.com/lionlai1989)
 
 ## Version History
 
-* 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
-* 0.1
+* 0.0.1
     * Initial Release
 
 ## License

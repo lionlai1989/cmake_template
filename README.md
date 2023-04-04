@@ -49,7 +49,9 @@ Before you start, you need to make sure you have the following dependencies inst
 
 ### Downloading
 * To download this repository, run the following command:
-```git clone --recursive https://github.com/lionlai1989/cmake_template.git```
+```shell
+git clone --recursive https://github.com/lionlai1989/cmake_template.git
+```
 If you forgot to use the `--recursive` option when cloning, you can still clone the submodules by running the command `git submodule update --init --recursive`.
 
 ### Build, Install and Execute

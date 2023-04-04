@@ -19,7 +19,7 @@ TEST(ImageXTensor, ClassAssertion) {
 
   std::clog << "Test Copy Constructor.\n";
   mypackage::image::ImageXTensor test_img2{test_img1};
-  std::clog << "test_img2\n" << (*test_img2.pixels) << '\n';
+  std::clog << "test_img2:\n" << (*test_img2.pixels) << '\n';
   EXPECT_EQ(test_img2, test_img1);
 
   std::clog << "Test Copy Assignment Operator.\n";
@@ -30,7 +30,8 @@ TEST(ImageXTensor, ClassAssertion) {
 
   std::clog << "Test Move Assignment Operator.\n";
   mypackage::image::ImageXTensor test_img4;
-  test_img4 = std::move(test_img1); // test_img1 is unspecified.
+  test_img4 = std::move(test_img1);
+  // test_img1 becomes unspecified after it's moved from.
   EXPECT_EQ(test_img1.pixels, nullptr);
   EXPECT_EQ(test_img4, test_img2);
 }

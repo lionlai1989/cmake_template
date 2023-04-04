@@ -14,19 +14,20 @@ TEST(ImageTest, ClassAssertion) {
       }
     }
   }
-  // std::cout << "test_img1\n" << (*test_img1.pixels) << '\n';
+  std::clog << "test_img1:\n" << (*test_img1.pixels) << '\n';
 
+  std::clog << "Test Copy Constructor.\n";
   mypackage::image::ImageEigen test_img2{test_img1};
-  // std::cout << "test_img2\n" << (*test_img2.pixels) << '\n';
+  std::clog << "test_img2:\n" << (*test_img2.pixels) << '\n';
   EXPECT_EQ(test_img2, test_img1);
 
+  std::clog << "Test Copy Assignment Operator.\n";
   mypackage::image::ImageEigen test_img3;
   test_img3 = test_img1;
-  // std::cout << "test_img3\n" << (*test_img3.pixels) << '\n';
+  std::clog << "test_img3:\n" << (*test_img3.pixels) << '\n';
   EXPECT_EQ(test_img3, test_img1);
 
   mypackage::image::ImageEigen tmp_img{2, 3, 4};
-  // std::cout << "tmp_img\n" << (*tmp_img.pixels) << '\n';
   for (int x = 0; x < tmp_img.width; x++) {
     for (int y = 0; y < tmp_img.height; y++) {
       for (int c = 0; c < tmp_img.channels; c++) {
@@ -34,12 +35,14 @@ TEST(ImageTest, ClassAssertion) {
       }
     }
   }
+  std::clog << "tmp_img:\n" << (*tmp_img.pixels) << '\n';
 
-  mypackage::image::ImageEigen test_img4{2, 3, 4};
-  (*test_img4.pixels).setConstant(1);
-  EXPECT_EQ(test_img4, tmp_img);
-
-  std::vector<mypackage::image::ImageEigen> vec;
-  vec.push_back(test_img4);
-  EXPECT_EQ(vec[0], tmp_img);
+  std::clog << "Test Move Assignment Operator.\n";
+  mypackage::image::ImageEigen test_img4;
+  test_img4 = std::move(tmp_img);
+  // tmp_img becomes unspecified after it's moved from.
+  EXPECT_EQ(tmp_img.pixels, nullptr);
+  mypackage::image::ImageEigen test_img5{2, 3, 4};
+  (*test_img5.pixels).setConstant(1);
+  EXPECT_EQ(test_img5, test_img4);
 }

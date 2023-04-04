@@ -78,7 +78,7 @@ If you forgot to use the `--recursive` option when cloning, you can still clone 
   /tmp/install-test/bin/rgb2gray -i /tmp/install-test/bin/book_in_scene.jpg -o ./book_in_scene_gray.jpg -m eigen
   /tmp/install-test/bin/rgb2gray -i /tmp/install-test/bin/book.png -o ./book_gray.png -m xtensor
   ```
-  It will create two grayscale images,`book_in_scene_gray.jpg` and `book_gray.png` in your current folder.
+  It will use `eigen` to create `book_in_scene_gray.jpg` and `xtensor` to create `book_gray.png` in your current folder.
 
 ### Developing
 - Using Libraries in this Package:  
@@ -141,3 +141,8 @@ Eigen:
 - https://gist.github.com/jeeho-ahn/07f943110731a0b4c2e73fc2fa8c96bf
 - https://stackoverflow.com/questions/60103934/cmake-eigen3-dir-notfound
 - https://stackoverflow.com/questions/12249140/find-package-eigen3-for-cmake
+
+XTensor:
+- https://github.com/xtensor-stack/xtensor
+- https://github.com/xtensor-stack/xsimd
+- https://github.com/xtensor-stack/xtl

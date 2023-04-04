@@ -32,7 +32,3 @@ target_compile_features(rgb2gray_static PRIVATE cxx_std_17)
 include(GNUInstallDirs) # Defines the ${CMAKE_INSTALL_INCLUDEDIR} variable.
 install(TARGETS calc_static)
 install(TARGETS rgb2gray_static)
-
-add_executable(xtensor_first_example xtensor_first_example.cpp)
-
-target_link_libraries(xtensor_first_example xtensor xtensor::optimize xtensor::use_xsimd)

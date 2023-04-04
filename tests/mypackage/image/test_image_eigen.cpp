@@ -35,11 +35,11 @@ TEST(ImageTest, ClassAssertion) {
     }
   }
 
-  mypackage::image::ImageEigen test_img4;
-  test_img4 = mypackage::image::get_image_with_ones(2, 3, 4);
+  mypackage::image::ImageEigen test_img4{2, 3, 4};
+  (*test_img4.pixels).setConstant(1);
   EXPECT_EQ(test_img4, tmp_img);
 
   std::vector<mypackage::image::ImageEigen> vec;
-  vec.push_back(mypackage::image::get_image_with_ones(2, 3, 4));
+  vec.push_back(test_img4);
   EXPECT_EQ(vec[0], tmp_img);
 }

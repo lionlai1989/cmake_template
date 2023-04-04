@@ -75,13 +75,16 @@ ImageEigen::ImageEigen(const ImageEigen &other)
    * of Eigen::Tensor() here.
    */
   *pixels = *other.pixels;
-  // for (int x = 0; x < width; x++) {
-  //   for (int y = 0; y < height; y++) {
-  //     for (int c = 0; c < channels; c++) {
-  //       (*pixels)(c, y, x) = (*other.pixels)(c, y, x);
-  //     }
-  //   }
-  // }
+  /**
+   * NOTE: Remind myself how to do things in an old school way.
+   * for (int x = 0; x < width; x++) {
+   *   for (int y = 0; y < height; y++) {
+   *     for (int c = 0; c < channels; c++) {
+   *       (*pixels)(c, y, x) = (*other.pixels)(c, y, x);
+   *     }
+   *   }
+   * }
+   */
 }
 
 ImageEigen &ImageEigen::operator=(const ImageEigen &other) {
@@ -106,13 +109,16 @@ ImageEigen &ImageEigen::operator=(const ImageEigen &other) {
     // Take advantage of copy assignment operator of Eigen::Tensor().
     *pixels = *other.pixels;
 
-    // for (int x = 0; x < this->width; x++) {
-    //   for (int y = 0; y < this->height; y++) {
-    //     for (int c = 0; c < this->channels; c++) {
-    //       (*this->pixels)(c, y, x) = (*other.pixels)(c, y, x);
-    //     }
-    //   }
-    // }
+    /**
+     * NOTE: Remind myself how to do things in an old school way.
+     * for (int x = 0; x < this->width; x++) {
+     *   for (int y = 0; y < this->height; y++) {
+     *     for (int c = 0; c < this->channels; c++) {
+     *       (*this->pixels)(c, y, x) = (*other.pixels)(c, y, x);
+     *     }
+     *   }
+     * }
+     */
   }
   return *this;
 }
@@ -248,19 +254,6 @@ ImageEigen rgb_to_grayscale_eigen(const ImageEigen &img) {
    * Eg, caller_gray = std::move(rgb_to_grayscale(img));
    */
   return gray;
-}
-
-ImageEigen get_image_with_ones(int channel, int height, int width) {
-  // TODO: There must be a BETTER way to set a tensor full of one.
-  ImageEigen img{channel, height, width};
-  for (int x = 0; x < img.width; x++) {
-    for (int y = 0; y < img.height; y++) {
-      for (int c = 0; c < img.channels; c++) {
-        (*img.pixels)(c, y, x) = 1.0;
-      }
-    }
-  }
-  return img;
 }
 
 } // namespace mypackage::image

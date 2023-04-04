@@ -45,6 +45,7 @@ int main(int argc, char **argv) {
     mypackage::rgb2gray_image_eigen(rgb_path, gray_path);
   } else if (method == "xtensor") {
     mypackage::rgb2gray_image_xtensor(rgb_path, gray_path);
+    mypackage::rgb2gray_image_xtensor_PassByTensor(rgb_path, gray_path);
   } else {
     std::cerr << "Unsuppported rgb2gray method.";
   }

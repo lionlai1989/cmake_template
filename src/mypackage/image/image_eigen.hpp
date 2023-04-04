@@ -14,9 +14,11 @@ struct ImageEigen {
   explicit ImageEigen(std::string file_path);
   explicit ImageEigen(int c, int h, int w);
   explicit ImageEigen(const ImageEigen &other);
+  // NOTE: move constructor cannot be explicit but copy constructor can. Explain
+  // why.
+  ImageEigen(ImageEigen &&other);
 
   ImageEigen &operator=(const ImageEigen &other);
-  ImageEigen(ImageEigen &&other);
   ImageEigen &operator=(ImageEigen &&other);
   ~ImageEigen();
   bool operator==(const ImageEigen &other) const;
@@ -30,7 +32,6 @@ struct ImageEigen {
 };
 
 ImageEigen rgb_to_grayscale_eigen(const ImageEigen &img);
-ImageEigen get_image_with_ones(int channel, int height, int width);
 } // namespace mypackage::image
 
 #endif

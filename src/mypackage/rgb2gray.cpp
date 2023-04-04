@@ -20,4 +20,14 @@ bool rgb2gray_image_xtensor(std::string input, std::string output) {
   return 0;
 }
 
+bool rgb2gray_image_xtensor_PassByTensor(std::string input,
+                                         std::string output) {
+  mypackage::image::ImageXTensor in_img{input};
+  mypackage::image::ImageXTensor out_img{in_img.channels, in_img.height,
+                                         in_img.width};
+  *out_img.pixels = mypackage::image::rgb_to_grayscale_xtensor(*in_img.pixels);
+  out_img.save(output);
+  return 0;
+}
+
 } // namespace mypackage

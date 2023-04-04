@@ -296,4 +296,26 @@ ImageXTensor rgb_to_grayscale_xtensor(const ImageXTensor &img) {
   return gray;
 }
 
+xt::xarray<double> rgb_to_grayscale_xtensor(const xt::xarray<double> &pixels) {
+  /**
+   * The shape of `pixels`: (channel, height, width)
+   */
+  assert(pixels.shape(0) >= 3);
+  auto height = pixels.shape(1);
+  auto width = pixels.shape(2);
+  xt::xarray<double>::shape_type shape = {1, height, width};
+  xt::xarray<double> gray(shape);
+  /**
+   * Slice r, g and b channels out. NOTE: `red`, `green` and `blue` are 2D.
+   */
+  xt::xarray<double> red = xt::view(pixels, 0, xt::all(), xt::all());
+  xt::xarray<double> green = xt::view(pixels, 1, xt::all(), xt::all());
+  xt::xarray<double> blue = xt::view(pixels, 2, xt::all(), xt::all());
+
+  xt::view(gray, 0, xt::all(), xt::all()) =
+      0.299 * red + 0.587 * green + 0.114 * blue;
+
+  return gray;
+}
+
 } // namespace mypackage::image

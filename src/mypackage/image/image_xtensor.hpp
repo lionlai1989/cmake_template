@@ -16,9 +16,13 @@ struct ImageXTensor {
   explicit ImageXTensor(std::string file_path);
   explicit ImageXTensor(int c, int h, int w);
   explicit ImageXTensor(const ImageXTensor &other);
+  /**
+   * NOTE: move constructor cannot be explicit but copy constructor can. Explain
+   * why.
+   */
+  ImageXTensor(ImageXTensor &&other);
 
   ImageXTensor &operator=(const ImageXTensor &other);
-  ImageXTensor(ImageXTensor &&other);
   ImageXTensor &operator=(ImageXTensor &&other);
   ~ImageXTensor();
   bool operator==(const ImageXTensor &other) const;
@@ -33,7 +37,12 @@ struct ImageXTensor {
   void swap(ImageXTensor &other);
 };
 
+/**
+ * NOTE: The following two functions have the same name but with different
+ * signatures.
+ */
 ImageXTensor rgb_to_grayscale_xtensor(const ImageXTensor &img);
+xt::xarray<double> rgb_to_grayscale_xtensor(const xt::xarray<double> &pixels);
 
 } // namespace mypackage::image
 

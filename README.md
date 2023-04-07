@@ -78,7 +78,15 @@ If you forgot to use the `--recursive` option when cloning, you can still clone 
   /tmp/install-test/bin/rgb2gray -i /tmp/install-test/bin/book_in_scene.jpg -o ./examples/files/book_in_scene_gray.jpg -m eigen
   /tmp/install-test/bin/rgb2gray -i /tmp/install-test/bin/book.png -o ./examples/files/book_gray.png -m xtensor
   ```
-  It will use `eigen` to create `book_in_scene_gray.jpg` and `xtensor` to create `book_gray.png` in your current folder.
+  It will use `eigen` to create `book_in_scene_gray.jpg` and `xtensor` to create `book_gray.png` in `./examples/files/`. Here is an example input and output images.
+  <p align="left">
+    <img src="./examples/files/book_in_scene.jpg" width="300" title="Input RGB Image with JPG Format">
+    <img src="./examples/files/book_in_scene_gray.jpg" width="300" title="Output Grayscale Image with JPG Format">
+  </p>
+  <p align="left">
+    <img src="./examples/files/book.png" width="300" title="Input RGB Image with PNG Format">
+    <img src="./examples/files/book_gray.png" width="300" title="Output Grayscale Image with PNG Format">
+  </p>
 
 ### Developing
 - Using Libraries in this Package:  

@@ -95,6 +95,9 @@ ImageXTensor::ImageXTensor(int c, int h, int w)
           xt::zeros<double>({c, h, w}))} {}
 
 ImageXTensor::ImageXTensor(const xt::xtensor<double, 3> &input_matrix) {
+  /**
+   * input_matrix.shape: (channel, height, width)
+   */
   channels = input_matrix.shape(0);
   height = input_matrix.shape(1);
   width = input_matrix.shape(2);

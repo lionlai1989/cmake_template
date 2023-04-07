@@ -15,6 +15,7 @@ struct ImageXTensor {
   // explicit is always better than implicit.
   explicit ImageXTensor(std::string file_path);
   explicit ImageXTensor(int c, int h, int w);
+  explicit ImageXTensor(const xt::xtensor<double, 3> &input_matrix);
   explicit ImageXTensor(const ImageXTensor &other);
   /**
    * NOTE: move constructor cannot be explicit but copy constructor can. Explain

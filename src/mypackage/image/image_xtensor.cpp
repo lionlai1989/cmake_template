@@ -94,6 +94,16 @@ ImageXTensor::ImageXTensor(int c, int h, int w)
       pixels{std::make_unique<xt::xtensor<double, 3>>(
           xt::zeros<double>({c, h, w}))} {}
 
+ImageXTensor::ImageXTensor(const xt::xtensor<double, 3> &input_matrix) {
+  channels = input_matrix.shape(0);
+  height = input_matrix.shape(1);
+  width = input_matrix.shape(2);
+  size = input_matrix.size();
+
+  // Initialize *pixels with the copy constructor of input_matrix
+  pixels = std::make_unique<xt::xtensor<double, 3>>(input_matrix);
+}
+
 ImageXTensor::ImageXTensor(const ImageXTensor &other)
     : channels{other.channels}, height{other.height}, width{other.width},
       size{other.size}, pixels{std::make_unique<xt::xtensor<double, 3>>(

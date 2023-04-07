@@ -214,7 +214,7 @@ bool ImageEigen::save(std::string file_path) {
       }
     }
   }
-  bool success;
+  bool success{false};
   if (file_extension == std::string(".jpg") ||
       file_extension == std::string(".JPG")) {
     auto quality = 100;

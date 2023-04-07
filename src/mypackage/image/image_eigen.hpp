@@ -13,9 +13,12 @@ struct ImageEigen {
   // explicit is always better than implicit.
   explicit ImageEigen(std::string file_path);
   explicit ImageEigen(int c, int h, int w);
+  explicit ImageEigen(const Eigen::Tensor<double, 3> &input_matrix);
   explicit ImageEigen(const ImageEigen &other);
-  // NOTE: move constructor cannot be explicit but copy constructor can. Explain
-  // why.
+  /**
+   * NOTE: move constructor cannot be explicit but copy constructor can. Explain
+   * why.
+   */
   ImageEigen(ImageEigen &&other);
 
   ImageEigen &operator=(const ImageEigen &other);

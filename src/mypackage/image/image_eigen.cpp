@@ -64,6 +64,20 @@ ImageEigen::ImageEigen(int c, int h, int w)
   }
 }
 
+ImageEigen::ImageEigen(const Eigen::Tensor<double, 3> &input_matrix) {
+  /**
+   * input_matrix.shape: (channel, height, width)
+   */
+  auto dimensions = input_matrix.dimensions();
+  channels = dimensions[0];
+  height = dimensions[1];
+  width = dimensions[2];
+  size = input_matrix.size();
+
+  // Initialize *pixels with the copy constructor of input_matrix
+  pixels = std::make_unique<Eigen::Tensor<double, 3>>(input_matrix);
+}
+
 ImageEigen::ImageEigen(const ImageEigen &other)
     : channels{other.channels}, height{other.height}, width{other.width},
       size{other.size}, pixels{std::make_unique<Eigen::Tensor<double, 3>>(

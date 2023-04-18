@@ -92,12 +92,16 @@ ImageXTensor::ImageXTensor(std::string file_path) {
 ImageXTensor::ImageXTensor(int c, int h, int w)
     : channels{c}, height{h}, width{w}, size{c * h * w},
       pixels{std::make_unique<xt::xtensor<double, 3>>(
-          xt::zeros<double>({c, h, w}))} {}
+          xt::zeros<double>({c, h, w}))} {
+  std::clog << "The constructor takes (c, h, w).\n";
+}
 
 ImageXTensor::ImageXTensor(const xt::xtensor<double, 3> &input_matrix) {
   /**
    * input_matrix.shape: (channel, height, width)
    */
+  std::clog << "The Constructor takes xtensor.\n";
+
   channels = input_matrix.shape(0);
   height = input_matrix.shape(1);
   width = input_matrix.shape(2);
@@ -152,7 +156,7 @@ ImageXTensor::ImageXTensor(ImageXTensor &&other)
    * if the size of `this.pixels` is the same as `other.pixels`.
    */
   std::clog << "Move Constructor\n";
-  swap(other);
+  // swap(other);
 
   /** NOTE: Remind myself how to do things in an old school way.
    * Reset all `other`'s members because they are not relevant anymore.

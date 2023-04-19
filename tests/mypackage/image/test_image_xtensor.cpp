@@ -34,6 +34,7 @@ TEST(ImageXTensor, ClassAssertion) {
   img_cp_asgn_otor = test_img;
   std::clog << "img_cp_asgn_otor\n" << (*img_cp_asgn_otor.pixels) << '\n';
   EXPECT_EQ(img_cp_asgn_otor, test_img);
+  EXPECT_EQ(img_cp_ctor, test_img);
 
   std::clog << "Test Move Assignment Operator.\n";
   mypackage::image::ImageXTensor img_mv_asgn_otor;

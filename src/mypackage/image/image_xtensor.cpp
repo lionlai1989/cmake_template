@@ -133,10 +133,17 @@ ImageXTensor::ImageXTensor(int c, int h, int w)
 }
 
 ImageXTensor::ImageXTensor(const xt::xtensor<double, 3> &input_matrix)
-    : channels{input_matrix.shape(0)}, height{input_matrix.shape(1)},
-      width{input_matrix.shape(2)}, size{input_matrix.size()},
-      pixels{std::make_unique<xt::xtensor<double, 3>>(input_matrix)} {
+    : channels(input_matrix.shape(0)), height(input_matrix.shape(1)),
+      width(input_matrix.shape(2)),
+      size(input_matrix.size()), pixels{
+                                     std::make_unique<xt::xtensor<double, 3>>(
+                                         input_matrix)} {
   // Initialize *pixels with the copy constructor of input_matrix
+
+  /** NOTE: Here comes the thing I really hate about C++. Why `()` and `{}` are
+   * used in the initializer list at the same time?
+   */
+
   /**
    * input_matrix.shape: (channel, height, width)
    */

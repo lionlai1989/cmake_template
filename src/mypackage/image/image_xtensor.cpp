@@ -22,18 +22,46 @@ ImageXTensor::ImageXTensor()
 
 ImageXTensor::ImageXTensor(std::string file_path) {
   std::clog << "The constructor takes a file path.\n";
+  /** NOTE: ImageDate is unique_ptr pointing to an array of unsigned char and
+   * with deleter function `stbi_image_free`.
+   * https://stackoverflow.com/a/21377382/2641038
+   */
+  using ImageDate =
+      std::unique_ptr<unsigned char[], decltype(&stbi_image_free)>;
+  ImageDate img_data{
+      stbi_load(file_path.c_str(), &width, &height, &channels, 0),
+      stbi_image_free};
 
-  unsigned char *img_data =
-      stbi_load(file_path.c_str(), &width, &height, &channels, 0);
+  /** NOTE: Using raw pointer could result to memory leak if exception is thrown
+   * before memory to which it points is freed. Thus, raw pointer should be
+   * avoided.
+   *
+   * unsigned char *img_data =
+   *   stbi_load(file_path.c_str(), &width, &height, &channels, 0);
+   */
   if (img_data == nullptr) {
     const char *error_msg = stbi_failure_reason();
-    std::cerr << "Failed to load image: " << file_path.c_str() << "\n";
-    std::cerr << "Error msg (stb_image): " << error_msg << "\n";
-    std::exit(1);
+    std::string err_msg = "Failed to load image: " + file_path + '\n' +
+                          "Error msg (stb_image): " + error_msg + '\n';
+    throw std::runtime_error(err_msg.c_str());
+    /** NOTE: When an object fails to construct correctly, you should throw an
+     * exception instead of relying on the `exit` function. Unlike `exit`, which
+     * doesn't unwind the stack, an `exception` will unwind the stack, and if
+     * it's not caught, it will cause the application to exit.
+     * Instead of using `exit`, you should use the `throw` statement and include
+     * the error message in the exception. Then, in the main() function, you can
+     * print the error message from the `exception`.
+     * Using `exit` can interrupt the program and prevent the memory from being
+     * freed, so it's best to avoid it and use exceptions instead.
+     *
+     * std::cerr << "Failed to load image: " << file_path.c_str() << "\n";
+     * std::cerr << "Error msg (stb_image): " << error_msg << "\n";
+     * std::exit(1);
+     */
   }
   pixels = std::make_unique<xt::xtensor<double, 3>>(
       xt::zeros<double>({channels, height, width}));
-  /** NOTE: It doesn't make the correct order.
+  /** NOTE: The following code doesn't create the correct memory layout.
    * pixels = std::make_unique<xt::xtensor<double, 3>>(
    *     xt::adapt<xt::layout_type::row_major>((char *)img_data,
    *                                           {channels, width, height}));
@@ -73,20 +101,28 @@ ImageXTensor::ImageXTensor(std::string file_path) {
    *   { 15, 18, 21, 24}}}
    *
    */
-  for (int x = 0; x < width; x++) {
-    for (int y = 0; y < height; y++) {
-      for (int c = 0; c < channels; c++) {
+  for (int x = 0; x < width; ++x) {
+    for (int y = 0; y < height; ++y) {
+      for (int c = 0; c < channels; ++c) {
         // PNG's pixels order is mysterious for me.
         std::size_t src_idx = y * width * channels + x * channels + c;
         // Rescale uint8 to float 0-1.
-        (*pixels)(c, y, x) = img_data[src_idx] / 255.;
+        (*pixels)(c, y, x) = img_data[src_idx] / 255.0;
+        //(*pixels)(c, y, x) = *(img_data.get() + src_idx) / 255.0;
       }
     }
   }
-  if (channels == 4)
+  if (channels == 4) {
     channels = 3; // ignore alpha channel
+  }
 
-  stbi_image_free(img_data);
+  /**
+   * NOTE: Placing `stbi_image_free` at the end of constructor is problematic
+   * because when exceptions happen or the program exits, it won't be called.
+   * Thus, memory leaks.
+   *
+   * stbi_image_free(img_data);
+   */
 }
 
 ImageXTensor::ImageXTensor(int c, int h, int w)
@@ -96,19 +132,15 @@ ImageXTensor::ImageXTensor(int c, int h, int w)
   std::clog << "The constructor takes (c, h, w).\n";
 }
 
-ImageXTensor::ImageXTensor(const xt::xtensor<double, 3> &input_matrix) {
+ImageXTensor::ImageXTensor(const xt::xtensor<double, 3> &input_matrix)
+    : channels{input_matrix.shape(0)}, height{input_matrix.shape(1)},
+      width{input_matrix.shape(2)}, size{input_matrix.size()},
+      pixels{std::make_unique<xt::xtensor<double, 3>>(input_matrix)} {
+  // Initialize *pixels with the copy constructor of input_matrix
   /**
    * input_matrix.shape: (channel, height, width)
    */
   std::clog << "The Constructor takes xtensor.\n";
-
-  channels = input_matrix.shape(0);
-  height = input_matrix.shape(1);
-  width = input_matrix.shape(2);
-  size = input_matrix.size();
-
-  // Initialize *pixels with the copy constructor of input_matrix
-  pixels = std::make_unique<xt::xtensor<double, 3>>(input_matrix);
 }
 
 ImageXTensor::ImageXTensor(const ImageXTensor &other)
@@ -131,10 +163,10 @@ ImageXTensor &ImageXTensor::operator=(const ImageXTensor &other) {
     /** NOTE: `this` could be constructed from the default constructor, which
      * means this->pixels points to nullptr. `this` could also have different
      * size as `other`'s. So, `this->pixels` shall be deleted, and it needs to
-     * reallocate new memory with the size of `other`. However, we don't need to
-     * call `unique_ptr::reset()` to delete the object that `this->pixels`
-     * points to. `this->pixels` will be deleted automatically when `unique_ptr`
-     * is redirected to another memory location.
+     * reallocate new memory with the size of `other`. However, we don't need
+     * to call `unique_ptr::reset()` to delete the object that `this->pixels`
+     * points to. `this->pixels` will be deleted automatically when
+     * `unique_ptr` is redirected to another memory location.
      */
     pixels = std::make_unique<xt::xtensor<double, 3>>(
         xt::zeros<double>({other.channels, other.height, other.width}));
@@ -151,9 +183,9 @@ ImageXTensor::ImageXTensor(ImageXTensor &&other)
    * used. std::move() is needed to in order to transfer the ownership from
    * `other.pixels` to `this.pixel`.
    * https://stackoverflow.com/questions/29194304/move-constructor-involving-const-unique-ptr
-   * Moreover, move constructor means that `this` is stealing the resource from
-   * `other`. Thus, we don't have to check if `this.pixels` points to nullptr or
-   * if the size of `this.pixels` is the same as `other.pixels`.
+   * Moreover, move constructor means that `this` is stealing the resource
+   * from `other`. Thus, we don't have to check if `this.pixels` points to
+   * nullptr or if the size of `this.pixels` is the same as `other.pixels`.
    */
   std::clog << "Move Constructor\n";
   // swap(other);
@@ -200,6 +232,11 @@ ImageXTensor &ImageXTensor::operator=(ImageXTensor &&other) {
   return *this;
 }
 
+// ImageXTensor &ImageXTensor::operator=(ImageXTensor rhs) {
+//   swap(rhs);
+//   return *this;
+// }
+
 ImageXTensor::~ImageXTensor() { std::clog << "Destruct Image.\n"; }
 
 bool ImageXTensor::operator==(const ImageXTensor &other) const {
@@ -218,19 +255,26 @@ bool ImageXTensor::save(std::string file_path) {
    * Save image as jpg or png file
    */
   auto file_extension = std::filesystem::path(file_path).extension();
-  /** NOTE: `out_data` will be sent to stb API which only takes raw pointer, so
-   * unique_ptr probably cannot be used here.
+  /** NOTE: `out_data` will be sent to stb API which only takes raw pointer,
+   * so unique_ptr probably cannot be used here.
+   *
+   * Ok, it turns out unique_ptr can be used but I am too dumb to figure it out
+   * before. Since unique_ptr is preferred, `new` should be avoided.
+   *
+   * unsigned char *out_data = new unsigned char[width * height * channels];
    */
-  unsigned char *out_data = new unsigned char[width * height * channels];
+  std::unique_ptr<unsigned char[]> out_data =
+      std::make_unique<unsigned char[]>(width * height * channels);
+
   /** NOTE: There seems to be no easy way to unfold a 3D array into a 1D array
    * with the desired order.
    */
-  for (auto x = 0; x < width; x++) {
-    for (auto y = 0; y < height; y++) {
-      for (auto c = 0; c < channels; c++) {
+  for (auto x = 0; x < width; ++x) {
+    for (auto y = 0; y < height; ++y) {
+      for (auto c = 0; c < channels; ++c) {
         int dst_idx = y * width * channels + x * channels + c;
-        // Fill out_data with uint8 values range 0-255.
-        out_data[dst_idx] = std::roundf((*pixels)(c, y, x) * 255.);
+        // Fill out_data with uint8 values range 0-255
+        out_data[dst_idx] = std::roundf((*pixels)(c, y, x) * 255.0);
       }
     }
   }
@@ -240,19 +284,24 @@ bool ImageXTensor::save(std::string file_path) {
       file_extension == std::string(".JPG")) {
     auto quality = 100;
     success = stbi_write_jpg(file_path.c_str(), width, height, channels,
-                             out_data, quality);
+                             out_data.get(), quality);
   } else if (file_extension == std::string(".png") ||
-             file_extension == std::string(".png")) {
+             file_extension == std::string(".PNG")) {
     auto stride_in_bytes = width * channels;
     success = stbi_write_png(file_path.c_str(), width, height, channels,
-                             out_data, stride_in_bytes);
+                             out_data.get(), stride_in_bytes);
   } else {
     std::cerr << "Unsupported file format: " << file_extension << "\n";
   }
   if (!success)
     std::cerr << "Failed to save image: " << file_path << "\n";
 
-  delete[] out_data;
+  /** NOTE: `out_data` is std::unique_ptr which means it will automatically
+   * delete the memory it holds when it's out-of-scope. Also, deleting memory
+   * manually should be avoided in general.
+   *
+   * delete[] out_data;
+   */
   return true;
 }
 
@@ -274,9 +323,9 @@ ImageXTensor rgb_to_grayscale_xtensor(const ImageXTensor &img) {
   xt::xarray<double> green = xt::view(*img.pixels, 1, xt::all(), xt::all());
   xt::xarray<double> blue = xt::view(*img.pixels, 2, xt::all(), xt::all());
   /**
-   * `*gray.pixels` is a 3D array. We need to make `red`, `green` and `blue` 3D
-   * again before summing them up. However, there might be an easier way to just
-   * access the first axis of `*gray.pixels` like we do in numpy:
+   * `*gray.pixels` is a 3D array. We need to make `red`, `green` and `blue`
+   * 3D again before summing them up. However, there might be an easier way to
+   * just access the first axis of `*gray.pixels` like we do in numpy:
    * pixels[0, :, :] = 0.299 * red + 0.587 * green + 0.114 * blue
    *
    * *gray.pixels = 0.299 * xt::view(red, xt::newaxis(), xt::all()) +
@@ -290,11 +339,11 @@ ImageXTensor rgb_to_grayscale_xtensor(const ImageXTensor &img) {
       0.299 * red + 0.587 * green + 0.114 * blue;
 
   /**
-   * This block of code is reserved to remember how to do things manually in the
-   * dark age.
+   * This block of code is reserved to remember how to do things manually in
+   * the dark age.
    *
-   * for (auto x = 0; x < img.width; x++) {
-   *   for (auto y = 0; y < img.height; y++) {
+   * for (auto x = 0; x < img.width; ++x) {
+   *   for (auto y = 0; y < img.height; ++y) {
    *     double red, green, blue;
    *     red = (*img.pixels)(0, y, x);
    *     green = (*img.pixels)(1, y, x);
@@ -306,9 +355,9 @@ ImageXTensor rgb_to_grayscale_xtensor(const ImageXTensor &img) {
    */
 
   /**
-   * gray cannot be returned by reference because it's out of scope. However, is
-   * it possible that gray can be moved to an object in caller function? Eg,
-   * caller_gray = std::move(rgb_to_grayscale(img));
+   * gray cannot be returned by reference because it's out of scope. However,
+   * is it possible that gray can be moved to an object in caller function?
+   * Eg, caller_gray = std::move(rgb_to_grayscale(img));
    */
   return gray;
 }

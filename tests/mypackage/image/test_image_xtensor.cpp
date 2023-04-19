@@ -49,10 +49,11 @@ TEST(ImageXTensor, ClassAssertion) {
    */
   mypackage::image::ImageXTensor img_mv_ctor{get_ones_image(2, 3, 4)};
   std::clog << "img_mv_ctor:\n" << (*img_mv_ctor.pixels) << '\n';
+
+  std::vector<mypackage::image::ImageXTensor> vec;
   /**
    * NOTE: Move Constructor is called because there is no instance construction.
    */
-  std::vector<mypackage::image::ImageXTensor> vec;
   vec.push_back(get_ones_image(2, 3, 4));
   std::clog << "vec[0]:\n" << *(vec[0].pixels) << '\n';
   mypackage::image::ImageXTensor tmp_vec = get_ones_image(2, 3, 4);

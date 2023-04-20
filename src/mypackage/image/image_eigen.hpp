@@ -31,6 +31,7 @@ struct ImageEigen {
   int width;
   int size;
   std::unique_ptr<Eigen::Tensor<double, 3>> pixels;
+
   bool save(std::string file_path);
 };
 

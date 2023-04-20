@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 #include <mypackage/image/image_eigen.hpp>
+#include <string>
 #include <vector>
 
 mypackage::image::ImageEigen get_ones_image(int channel, int height,
@@ -10,12 +11,13 @@ mypackage::image::ImageEigen get_ones_image(int channel, int height,
   return img;
 }
 
-TEST(ImageTest, ClassAssertion) {
+TEST(TestImageEigen, TestWithArray) {
   mypackage::image::ImageEigen test_img(2, 3, 4);
   int counter = 0;
   for (int x = 0; x < test_img.width; x++) {
     for (int y = 0; y < test_img.height; y++) {
       for (int c = 0; c < test_img.channels; c++) {
+        EXPECT_EQ((*test_img.pixels)(c, y, x), 0.0);
         (*test_img.pixels)(c, y, x) = counter;
         ++counter;
       }
@@ -58,4 +60,20 @@ TEST(ImageTest, ClassAssertion) {
   std::clog << "vec[0]:\n" << *(vec[0].pixels) << '\n';
   mypackage::image::ImageEigen tmp_vec = get_ones_image(2, 3, 4);
   EXPECT_EQ(tmp_vec, vec[0]);
+}
+
+TEST(TestImageEigen, JPGImageTest) {
+  std::string jpg_path = "../../../../examples/files/book_in_scene.jpg";
+  mypackage::image::ImageEigen test_img(jpg_path);
+  EXPECT_EQ(test_img.channels, 3);
+  EXPECT_EQ(test_img.height, 540);
+  EXPECT_EQ(test_img.width, 720);
+}
+
+TEST(TestImageEigen, PNGImageTest) {
+  std::string png_path = "../../../../examples/files/book.png";
+  mypackage::image::ImageEigen test_img(png_path);
+  EXPECT_EQ(test_img.channels, 3);
+  EXPECT_EQ(test_img.height, 556);
+  EXPECT_EQ(test_img.width, 394);
 }

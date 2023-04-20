@@ -19,13 +19,19 @@ ImageEigen::ImageEigen()
 
 ImageEigen::ImageEigen(std::string file_path) {
   std::clog << "The constructor takes a file path.\n";
-  unsigned char *img_data =
-      stbi_load(file_path.c_str(), &width, &height, &channels, 0);
+  using ImageDate =
+      std::unique_ptr<unsigned char[], decltype(&stbi_image_free)>;
+  ImageDate img_data{
+      stbi_load(file_path.c_str(), &width, &height, &channels, 0),
+      stbi_image_free};
+
+  //   unsigned char *img_data =
+  //       stbi_load(file_path.c_str(), &width, &height, &channels, 0);
   if (img_data == nullptr) {
     const char *error_msg = stbi_failure_reason();
-    std::cerr << "Failed to load image: " << file_path.c_str() << "\n";
-    std::cerr << "Error msg (stb_image): " << error_msg << "\n";
-    std::exit(1);
+    std::string err_msg = "Failed to load image: " + file_path + '\n' +
+                          "Error msg (stb_image): " + error_msg + '\n';
+    throw std::runtime_error(err_msg.c_str());
   }
 
   pixels = std::make_unique<Eigen::Tensor<double, 3>>(channels, height, width);
@@ -35,33 +41,26 @@ ImageEigen::ImageEigen(std::string file_path) {
             << width << '\n';
   assert(size == channels * height * width);
 
-  for (int x = 0; x < width; x++) {
-    for (int y = 0; y < height; y++) {
-      for (int c = 0; c < channels; c++) {
+  for (int x = 0; x < width; ++x) {
+    for (int y = 0; y < height; ++y) {
+      for (int c = 0; c < channels; ++c) {
         // PNG's pixels format is mysterious for me.
         std::size_t src_idx = y * width * channels + x * channels + c;
         // Rescale uint8 to float 0-1.
-        (*pixels)(c, y, x) = img_data[src_idx] / 255.;
+        (*pixels)(c, y, x) = img_data[src_idx] / 255.0;
       }
     }
   }
-  if (channels == 4)
+  if (channels == 4) {
     channels = 3; // ignore alpha channel
-  stbi_image_free(img_data);
+  }
 }
 
 ImageEigen::ImageEigen(int c, int h, int w)
     : channels{c}, height{h}, width{w}, size{c * h * w},
       pixels{std::make_unique<Eigen::Tensor<double, 3>>(c, h, w)} {
   std::clog << "The constructor takes c, h, and w.\n";
-  // TODO: There must be a BETTER way to reset pixels to 0.
-  for (int x = 0; x < width; x++) {
-    for (int y = 0; y < height; y++) {
-      for (int c = 0; c < channels; c++) {
-        (*pixels)(c, y, x) = 0;
-      }
-    }
-  }
+  pixels->setConstant(0);
 }
 
 ImageEigen::ImageEigen(const Eigen::Tensor<double, 3> &input_matrix) {
@@ -218,15 +217,16 @@ bool ImageEigen::save(std::string file_path) {
    * Save image as jpg or png file
    */
   auto file_extension = std::filesystem::path(file_path).extension();
-  // out_data will be sent to stb API which only takes raw pointer, so
-  // unique_ptr cannot be used here.
-  unsigned char *out_data = new unsigned char[width * height * channels];
-  for (int x = 0; x < width; x++) {
-    for (int y = 0; y < height; y++) {
-      for (int c = 0; c < channels; c++) {
+
+  std::unique_ptr<unsigned char[]> out_data =
+      std::make_unique<unsigned char[]>(width * height * channels);
+
+  for (int x = 0; x < width; ++x) {
+    for (int y = 0; y < height; ++y) {
+      for (int c = 0; c < channels; ++c) {
         int dst_idx = y * width * channels + x * channels + c;
         // Fill out_data with values range uint8 0-255.
-        out_data[dst_idx] = std::roundf((*pixels)(c, y, x) * 255.);
+        out_data[dst_idx] = std::roundf((*pixels)(c, y, x) * 255.0);
       }
     }
   }
@@ -235,19 +235,18 @@ bool ImageEigen::save(std::string file_path) {
       file_extension == std::string(".JPG")) {
     auto quality = 100;
     success = stbi_write_jpg(file_path.c_str(), width, height, channels,
-                             out_data, quality);
+                             out_data.get(), quality);
   } else if (file_extension == std::string(".png") ||
-             file_extension == std::string(".png")) {
+             file_extension == std::string(".PNG")) {
     auto stride_in_bytes = width * channels;
     success = stbi_write_png(file_path.c_str(), width, height, channels,
-                             out_data, stride_in_bytes);
+                             out_data.get(), stride_in_bytes);
   } else {
     std::cerr << "Unsupported file format: " << file_extension << "\n";
   }
   if (!success)
     std::cerr << "Failed to save image: " << file_path << "\n";
 
-  delete[] out_data;
   return true;
 }
 

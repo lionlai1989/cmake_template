@@ -39,6 +39,13 @@ struct ImageXTensor {
   int height;
   int width;
   int size;
+
+  /** NOTE: Using `unique_ptr` here is overengineering. `pixels` can be defined
+   * as `xt::xtensor` directly even its exact shape/size is unknown at
+   * compilation time (but its dimension is known at compilation time).
+   *
+   * xt::xtensor<double, 3> pixels;
+   */
   std::unique_ptr<xt::xtensor<double, 3>> pixels;
 
   bool save(std::string file_path);

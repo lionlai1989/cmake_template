@@ -159,29 +159,6 @@ ImageXTensor::ImageXTensor(const ImageXTensor &other)
   *pixels = *other.pixels;
 }
 
-ImageXTensor &ImageXTensor::operator=(const ImageXTensor &other) {
-  std::clog << "Copy Assignment Operator\n";
-  if (this != &other) {
-    channels = other.channels;
-    height = other.height;
-    width = other.width;
-    size = other.size;
-
-    /** NOTE: `this` could be constructed from the default constructor, which
-     * means this->pixels points to nullptr. `this` could also have different
-     * size as `other`'s. So, `this->pixels` shall be deleted, and it needs to
-     * reallocate new memory with the size of `other`. However, we don't need
-     * to call `unique_ptr::reset()` to delete the object that `this->pixels`
-     * points to. `this->pixels` will be deleted automatically when
-     * `unique_ptr` is redirected to another memory location.
-     */
-    pixels = std::make_unique<xt::xtensor<double, 3>>(
-        xt::zeros<double>({other.channels, other.height, other.width}));
-    *pixels = *other.pixels;
-  }
-  return *this;
-}
-
 ImageXTensor::ImageXTensor(ImageXTensor &&other)
     : channels{other.channels}, height{other.height}, width{other.width},
       size{other.size}, pixels{std::move(other.pixels)} {
@@ -205,6 +182,29 @@ ImageXTensor::ImageXTensor(ImageXTensor &&other)
    * other.size = 0;
    * other.pixels = nullptr;
    */
+}
+
+ImageXTensor &ImageXTensor::operator=(const ImageXTensor &other) {
+  std::clog << "Copy Assignment Operator\n";
+  if (this != &other) {
+    channels = other.channels;
+    height = other.height;
+    width = other.width;
+    size = other.size;
+
+    /** NOTE: `this` could be constructed from the default constructor, which
+     * means this->pixels points to nullptr. `this` could also have different
+     * size as `other`'s. So, `this->pixels` shall be deleted, and it needs to
+     * reallocate new memory with the size of `other`. However, we don't need
+     * to call `unique_ptr::reset()` to delete the object that `this->pixels`
+     * points to. `this->pixels` will be deleted automatically when
+     * `unique_ptr` is redirected to another memory location.
+     */
+    pixels = std::make_unique<xt::xtensor<double, 3>>(
+        xt::zeros<double>({other.channels, other.height, other.width}));
+    *pixels = *other.pixels;
+  }
+  return *this;
 }
 
 ImageXTensor &ImageXTensor::operator=(ImageXTensor &&other) {
@@ -239,10 +239,21 @@ ImageXTensor &ImageXTensor::operator=(ImageXTensor &&other) {
   return *this;
 }
 
-// ImageXTensor &ImageXTensor::operator=(ImageXTensor rhs) {
-//   swap(rhs);
-//   return *this;
-// }
+/** NOTE: This block of code can handle both cases of copy assignment operator
+ * and move assignment operator. How? Read:
+ * https://stackoverflow.com/questions/3279543/what-is-the-copy-and-swap-idiom
+ * https://codereview.stackexchange.com/questions/284388/a-simple-image-class-utilizing-the-xtensor-library/284406#284406
+ *
+ * It's commented out now because I need to learn the proper way to program copy
+ * assignment operator and move assignment operator. But in general, this should
+ * be preferred.
+ *
+ * ImageXTensor &ImageXTensor::operator=(ImageXTensor rhs) {
+ *   std::clog << "Copy Assignment or Move Assignment Operator\n";
+ *   swap(rhs);
+ *   return *this;
+ * }
+ */
 
 ImageXTensor::~ImageXTensor() { std::clog << "Destruct Image.\n"; }
 

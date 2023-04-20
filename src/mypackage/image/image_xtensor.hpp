@@ -14,9 +14,9 @@ struct ImageXTensor {
 
   // explicit is always better than implicit.
   explicit ImageXTensor(std::string file_path);
-  explicit ImageXTensor(int c, int h, int w);
+  ImageXTensor(int c, int h, int w);
   explicit ImageXTensor(const xt::xtensor<double, 3> &input_matrix);
-  explicit ImageXTensor(const ImageXTensor &other);
+  ImageXTensor(const ImageXTensor &other);
   /**
    * NOTE: move constructor cannot be explicit but copy constructor can. Explain
    * why.
@@ -25,6 +25,13 @@ struct ImageXTensor {
 
   ImageXTensor &operator=(const ImageXTensor &other);
   ImageXTensor &operator=(ImageXTensor &&other);
+  /**
+   * NOTE: This block of code can handle both cases of copy assignment operator
+   * and move assignment operator. Please check its definition in source file.
+   *
+   * ImageXTensor &operator=(ImageXTensor rhs);
+   */
+
   ~ImageXTensor();
   bool operator==(const ImageXTensor &other) const;
 

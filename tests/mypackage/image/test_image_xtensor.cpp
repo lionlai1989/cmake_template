@@ -2,7 +2,6 @@
 #include <iostream>
 #include <mypackage/image/image_xtensor.hpp>
 #include <vector>
-#include <xtensor/xadapt.hpp>
 
 mypackage::image::ImageXTensor get_ones_image(int channel, int height,
                                               int width) {

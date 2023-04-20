@@ -68,6 +68,8 @@ ImageEigen::ImageEigen(const Eigen::Tensor<double, 3> &input_matrix) {
   /**
    * input_matrix.shape: (channel, height, width)
    */
+  std::clog << "The Constructor takes Eigen::Tensor.\n";
+
   auto dimensions = input_matrix.dimensions();
   channels = dimensions[0];
   height = dimensions[1];

@@ -115,6 +115,12 @@ This project is licensed under the [NAME HERE] License - see the LICENSE.md file
 ## Acknowledgments
 Explore the inspiration and references listed here to further expand your knowledge and sharpen your skills.
 
+CMake Github:
+- https://github.com/PacktPublishing/CMake-Best-Practices
+- https://github.com/vndmtrx/check-cmake-example
+- https://github.com/sorush-khajepor/cmake-examples
+
+
 CMake:
 - https://www.pragmaticlinux.com/2022/02/create-a-shared-library-in-c-with-cmake/
 - https://www.pragmaticlinux.com/2022/03/how-to-link-a-shared-library-with-gcc-and-cmake/

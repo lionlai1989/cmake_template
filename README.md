@@ -110,9 +110,11 @@ Your feedback, comments, and questions about this project are welcome, as are an
 This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
 
 ## Acknowledgments
-Explore the inspiration and references listed here to further expand your knowledge and sharpen your skills.
+Useful references are listed here.
 
 CMake Github:
+- [Effective Modern CMake](https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1)
+- https://github.com/friendlyanon/cmake-init
 - https://github.com/PacktPublishing/CMake-Best-Practices
 - https://github.com/vndmtrx/check-cmake-example
 - https://github.com/sorush-khajepor/cmake-examples
